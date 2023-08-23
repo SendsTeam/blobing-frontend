@@ -1,0 +1,22 @@
+{
+  "name": "blobing-frontend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "stats.js": "^0.17.0",
+    "three": "^0.155.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue-jsx": "^3.0.2",
+    "prettier": "^3.0.0",
+    "vite": "^4.4.9"
+  }
+}
