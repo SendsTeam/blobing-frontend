@@ -1,21 +1,59 @@
 import './Game.css'
+import Loading from '../Loading/Loading.jsx'
+import Menu from '../Menu/Menu.jsx'
+
 import * as THREE from 'three'
+import * as TWEEN from '@tweenjs/tween.js'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
 import Stats from 'stats.js'
 import { phy } from '../../utils/Phy.module.js'
 
-let camera, scene, renderer, render_stats, controls, diceModel
-const GAME_STATUS = {
-  UNLOAD: 0,
-  READY: 1,
-  ING: 2
-}
-
-const Game = {
+export default {
+  setup() {
+    return {
+      three: {
+        camera: null,
+        scene: null,
+        renderer: null,
+        renderStats: null,
+        controls: null
+      }
+    }
+  },
   data() {
     return {
-      gameStatus: GAME_STATUS.UNLOAD
+      game: {
+        STATUS: {
+          FREE: 'free',
+          READY: 'ready',
+          ING: 'ing'
+        },
+        status: 'free',
+        downFlag: false
+      },
+      dice: {
+        num: 6,
+        data: [],
+        model: null,
+        collisionSound: {
+          soundTime: [],
+          sound: []
+        }
+      }
+    }
+  },
+  watch: {
+    'game.status'(value) {
+      if (value === this.game.STATUS.READY) {
+        this.setGravity(0)
+        this.three.controls.enabled = false
+        this.playAngle()
+      } else {
+        this.three.controls.enabled = true
+        this.setGravity(100)
+        this.defaultAngle()
+      }
     }
   },
   methods: {
@@ -23,40 +61,59 @@ const Game = {
     threeInit() {
       // camera and scene
       const container = this.$refs.game
-      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 1000)
-      camera.position.set(0, 28, 0)
-      scene = new THREE.Scene()
+      this.three.camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.25,
+        1000
+      )
+      this.three.camera.position.set(0, 30, 0)
+      this.three.scene = new THREE.Scene()
 
       // render
-      renderer = new THREE.WebGLRenderer({ antialias: true })
-      renderer.setPixelRatio(window.devicePixelRatio)
-      renderer.setSize(window.innerWidth, window.innerHeight)
-      renderer.toneMapping = THREE.ACESFilmicToneMapping
-      renderer.toneMappingExposure = 1
-      renderer.shadowMap.enabled = true
-      renderer.shadowMapSoft = true
-      container.appendChild(renderer.domElement)
+      this.three.renderer = new THREE.WebGLRenderer({ antialias: true })
+      this.three.renderer.setPixelRatio(window.devicePixelRatio)
+      this.three.renderer.setSize(window.innerWidth, window.innerHeight)
+      this.three.renderer.toneMapping = THREE.ACESFilmicToneMapping
+      this.three.renderer.toneMappingExposure = 1
+      this.three.renderer.shadowMap.enabled = true
+      this.three.renderer.shadowMapSoft = true
+      container.appendChild(this.three.renderer.domElement)
+
+      //sound
+      let listener = new THREE.AudioListener()
+      this.three.camera.add(listener)
+      new THREE.AudioLoader().load('sounds/collision.mp3', (buffer) => {
+        for (let i = 0; i < this.dice.num; i++) {
+          this.dice.collisionSound.sound.push(new THREE.Audio(listener))
+          this.dice.collisionSound.soundTime.push(new Date().getTime())
+          this.dice.collisionSound.sound[i].setBuffer(buffer)
+          this.dice.collisionSound.sound[i].setLoop(false)
+          this.dice.collisionSound.sound[i].setVolume(1)
+        }
+      })
 
       // stats
-      render_stats = new Stats()
-      render_stats.domElement.style.zIndex = 100
-      container.appendChild(render_stats.domElement)
+      this.three.renderStats = new Stats()
+      this.three.renderStats.domElement.style.zIndex = 100
+      container.appendChild(this.three.renderStats.domElement)
 
       // controls
-      controls = new OrbitControls(camera, renderer.domElement)
-      controls.minDistance = 12
-      controls.maxDistance = 28
-      controls.enablePan = false
-      controls.target.set(0, 0, 0)
-      controls.enableDamping = true
-      controls.update()
+      this.three.controls = new OrbitControls(this.three.camera, this.three.renderer.domElement)
+      this.three.controls.minDistance = 12
+      this.three.controls.maxDistance = 30
+      this.three.controls.enablePan = false
+      this.three.controls.target.set(0, 0, 0)
+      this.three.controls.enableDamping = true
+      this.three.controls.update()
 
       // background
+      this.$refs.loadingInstance.setMsg('1/2 :加载背景ing...')
       new RGBELoader().load('/textures/thatch_chapel_1k.hdr', (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping
-        scene.background = texture
-        scene.backgroundBlurriness = 0.5
-        scene.environment = texture
+        this.three.scene.background = texture
+        this.three.scene.backgroundBlurriness = 0.5
+        this.three.scene.environment = texture
         this.render3D()
       })
 
@@ -65,99 +122,208 @@ const Game = {
     },
     // handle window resize
     onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight
-      camera.updateProjectionMatrix()
-      renderer.setSize(window.innerWidth, window.innerHeight)
+      this.three.camera.aspect = window.innerWidth / window.innerHeight
+      this.three.camera.updateProjectionMatrix()
+      this.three.renderer.setSize(window.innerWidth, window.innerHeight)
       this.render3D()
     },
     // render
     render3D() {
-      renderer.render(scene, camera)
-    },
-    // reset
-    reset() {
-      let i = 20
-      while (i--) phy.remove('dice' + i)
-
-      controls.reset()
-      controls.object.position.set(0, 18, 0)
-      controls.update()
-      this.render3D()
+      this.three.renderer.render(this.three.scene, this.three.camera)
     },
     // frame loop
-    animate() {
+    animate(stamp = 0) {
       requestAnimationFrame(this.animate)
-      controls.update()
+      TWEEN.update()
+      this.three.controls.update()
       this.render3D()
-      render_stats.update()
+      this.three.renderStats.update()
     },
-    //phy init
+    //phy
     phyInit() {
       phy.init({
         type: 'PHYSX',
         worker: true,
         callback: this.phyCallback,
-        scene: scene,
+        scene: this.three.scene,
         path: 'phy/'
       })
     },
     phyCallback() {
-      phy.set({ substep: 2, gravity: [0, -100, 0], fps: 120 })
-      phy.load(
-        ['Bowl/bowl.glb', 'Dice/dice.glb'],
-        function () {
-          //bowl
-          let bowlModel = phy.getMesh('bowl')['mesh']
-          phy.add({
-            name: 'bowl',
-            type: 'mesh',
-            shape: bowlModel,
-            mesh: bowlModel,
-            pos: [0, -5, 0],
-            restitution: 1,
-            friction: 0.2
-          })
-
-          diceModel = phy.getMesh('dice')
-
-          // make dices material
-          phy.material({
-            name: 'dice',
-            roughness: 0.0,
-            metalness: 0.0,
-            map: phy.texture({ url: 'textures/dices_c.png' }),
-            normalMap: phy.texture({ url: 'textures/dices_n.png' }),
-            normalScale: [5, -5]
-          })
-        },
-        'models/'
-      )
+      phy.set({ substep: 2, gravity: [0, -100, 0], fps: 120, full: true })
+      this.$refs.loadingInstance.setMsg('2/2 :加载模型ing...')
+      phy.load(['Bowl/bowl.glb', 'Dice/dice.glb'], this.modelLoadedCallback, 'models/')
     },
-    play() {
-      let i = 6
-      while (i--)
+    modelLoadedCallback() {
+      //bowl
+      let bowlModel = phy.getMesh('bowl')['mesh']
+      phy.add({
+        name: 'bowlInstance',
+        type: 'mesh',
+        shape: bowlModel,
+        mesh: bowlModel,
+        pos: [0, -4, 0],
+        restitution: 0.6,
+        friction: 0.2
+      })
+      this.dice.model = phy.getMesh('dice')
+      // make dices material
+      phy.material({
+        name: 'dice',
+        roughness: 0.0,
+        metalness: 0.0,
+        map: phy.texture({ url: 'textures/dices_c.png' }),
+        normalMap: phy.texture({ url: 'textures/dices_n.png' }),
+        normalScale: [5, -5]
+      })
+      this.$refs.loadingInstance.setMsg('加载完毕')
+      this.$refs.loadingInstance.finish()
+
+      let i = this.dice.num
+      const radius = 2
+      while (i--) {
+        let index = this.dice.num - 1 - i
+        const angle = (Math.PI * 2 * i) / this.dice.num // 计算每个骰子的角度
+        const x = Math.cos(angle) * radius // 计算 x 坐标
+        const z = Math.sin(angle) * radius // 计算 z 坐标
+        const pos = [x, 3, z] // 设置骰子的位置
+        const rot = [Math.random() * 360, Math.random() * 360, Math.random() * 360]
+        this.dice.data.push(
+          phy.add({
+            type: 'convex',
+            name: 'diceInstance' + index,
+            material: 'dice',
+            shape: this.dice.model['D6'].geometry,
+            size: [50, 50, 50],
+            pos,
+            rot,
+            // density: 0.5,
+            friction: 0.5,
+            mass: 0.01,
+            restitution: 0.5
+          })
+        )
+        this.dice.data[index].collision = false
         phy.add({
-          type: 'convex',
-          name: 'dice' + i,
-          material: 'dice',
-          shape: diceModel['D6'].geometry,
-          size: [50, 50, 50],
-          pos: [0, 2 * i + 3, 0],
-          rot: [Math.random() * 360 - 180, Math.random() * 360 - 180, Math.random() * 360 - 180],
-          // density: 0.5,
-          friction: 0.5,
-          mass: 0.01,
-          restitution: 0.7
+          type: 'contact',
+          b1: 'diceInstance' + index,
+          b2: 'bowlInstance',
+          callback: (data) => {
+            this.dice.data[index].collision = data.hit
+            this.collisionCallback(index, data)
+          },
+          always: false
         })
-      // phy.add({
-      //   name: 'dice' + i,
-      //   type: 'box',
-      //   size: [0.8, 0.8, 0.8],
-      //   pos: [0, 5 + i * 2, 0],
-      //   radius: 0.1,
-      //   mass: 0.001,
-      //   restitution: 0.75
-      // })
+      }
+    },
+    collisionCallback(index, data) {
+      if (data.hit) {
+        let volume = this.velocity(this.dice.data[index]) / 100
+        if (volume > 1) volume = 1
+        this.playCollisionSound(index, volume)
+      }
+    },
+    playCollisionSound(index, volume) {
+      let time = new Date().getTime()
+      if (time - this.dice.collisionSound.soundTime[index] > 50) {
+        if (this.dice.collisionSound.sound[index].isPlaying)
+          this.dice.collisionSound.sound[index].stop()
+        this.dice.collisionSound.sound[index].setVolume(volume)
+        this.dice.collisionSound.sound[index].play()
+        this.dice.collisionSound.soundTime[index] = time
+      }
+    },
+    setGravity(g) {
+      if (g === 0) {
+        phy.set({ substep: 2, gravity: [0, 0.0001, 0], fps: 120, full: true })
+      } else {
+        phy.set({ substep: 2, gravity: [0, -g, 0], fps: 120, full: true })
+      }
+      phy.setGravity()
+      let i = this.dice.num
+      while (i--) {
+        phy.change({
+          name: 'diceInstance' + i,
+          reset: true
+        })
+      }
+    },
+    defaultAngle() {
+      new TWEEN.Tween(this.three.camera.position).to({ x: 0, y: 15.5, z: 11 }, 1000).start()
+    },
+    playAngle() {
+      new TWEEN.Tween(this.three.camera.position).to({ x: 0, y: 30, z: 1 }, 1000).start()
+    },
+    velocity(o) {
+      return Math.pow(o.velocity.x ** 2 + o.velocity.y ** 2 + o.velocity.z ** 2, 1 / 2)
+    },
+    convertMousePositionToCoordinates(event) {
+      if (event.touches) {
+        event = event.touches[0]
+      }
+      const screenX = event.clientX // 鼠标点击的屏幕水平坐标
+      const screenY = event.clientY // 鼠标点击的屏幕垂直坐标
+
+      const mouse = new THREE.Vector2()
+      mouse.x = (screenX / window.innerWidth) * 2 - 1
+      mouse.y = -(screenY / window.innerHeight) * 2 + 1
+
+      const raycaster = new THREE.Raycaster()
+      raycaster.setFromCamera(mouse, this.three.camera) // 假设 camera 是 Three.js 相机对象
+
+      const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0) // 以 Y 轴为法线的平面
+      const intersection = new THREE.Vector3()
+      raycaster.ray.intersectPlane(plane, intersection)
+
+      const x = intersection.x
+      const z = intersection.z
+
+      return { x, z }
+    },
+    //game logic
+    down(e) {
+      this.game.downFlag = true
+      if (this.game.status === this.game.STATUS.READY) {
+        this.movePos(e)
+      }
+    },
+    up(e) {
+      this.game.downFlag = false
+      if (this.game.status === this.game.STATUS.READY) {
+        this.game.status = this.game.STATUS.ING
+      }
+    },
+    move(e) {
+      if (this.game.status === this.game.STATUS.READY && this.game.downFlag) {
+        this.movePos(e)
+      }
+    },
+    movePos(e) {
+      let offset = this.convertMousePositionToCoordinates(e)
+      let i = this.dice.num
+      const radius = 2
+      while (i--) {
+        const angle = (Math.PI * 2 * i) / this.dice.num // 计算每个骰子的角度
+        const x = Math.cos(angle) * radius // 计算 x 坐标
+        const z = Math.sin(angle) * radius // 计算 z 坐标
+        const pos = [x + offset.x, 6, z + offset.z] // 设置骰子的位置
+        const rot = [Math.random() * 360, Math.random() * 360, Math.random() * 360]
+        phy.change({
+          name: 'diceInstance' + i,
+          pos,
+          rot,
+          reset: true
+        })
+      }
+    },
+    gameInit() {
+      document.addEventListener('mousedown', this.down)
+      document.addEventListener('touchstart', this.down)
+      document.addEventListener('mouseup', this.up)
+      document.addEventListener('touchend', this.up)
+      document.addEventListener('mousemove', this.move)
+      document.addEventListener('touchmove', this.move)
+      this.defaultAngle()
     }
   },
   mounted() {
@@ -165,19 +331,28 @@ const Game = {
     this.render3D()
     this.animate()
     this.phyInit()
+    this.gameInit()
+    // controls.addEventListener('change', function () {
+    //   console.log(camera.position)
+    // })
+    setInterval(() => console.log(this.dice.data), 1000)
   },
   beforeUnmount() {
-    window.removeEventListener('resize')
+    window.removeEventListener('resize', this.onWindowResize)
+    document.removeEventListener('mousedown', this.down)
+    document.removeEventListener('touchstart', this.down)
+    document.removeEventListener('mouseup', this.up)
+    document.removeEventListener('touchend', this.up)
+    document.removeEventListener('mousemove', this.move)
+    document.removeEventListener('touchmove', this.move)
   },
   render() {
     return (
       <>
+        <Loading ref="loadingInstance"></Loading>
+        <Menu></Menu>
         <div ref="game"></div>
       </>
     )
   }
 }
-
-const play = Game.methods.play
-export { play }
-export default Game
