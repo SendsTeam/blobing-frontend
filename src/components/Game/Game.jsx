@@ -2,6 +2,7 @@ import './Game.css'
 import Loading from '../Loading/Loading.jsx'
 import Menu from '../Menu/Menu.jsx'
 
+import { Transition } from 'vue'
 import * as THREE from 'three'
 import * as TWEEN from '@tweenjs/tween.js'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
@@ -30,7 +31,15 @@ export default {
           ING: 'ing'
         },
         status: 'free',
-        downFlag: false
+        downFlag: false,
+        settlementJudgeTimer: null,
+        judgeFlag: false,
+        judgeTimer: null,
+        result: {
+          text: '状元',
+          points: 0
+        },
+        playBtnAble: false
       },
       dice: {
         num: 6,
@@ -48,11 +57,16 @@ export default {
       if (value === this.game.STATUS.READY) {
         this.setGravity(0)
         this.three.controls.enabled = false
-        this.playAngle()
+        this.readyAngle()
+      } else if (value === this.game.STATUS.FREE) {
+        this.game.playBtnAble = true
+        this.three.controls.enabled = true
+        this.setGravity(100)
+        this.freeAngle()
       } else {
         this.three.controls.enabled = true
         this.setGravity(100)
-        this.defaultAngle()
+        this.ingAngle()
       }
     }
   },
@@ -109,10 +123,10 @@ export default {
 
       // background
       this.$refs.loadingInstance.setMsg('1/2 :加载背景ing...')
-      new RGBELoader().load('/textures/thatch_chapel_1k.hdr', (texture) => {
+      new RGBELoader().load('/textures/music_hall_02_1k.hdr', (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping
         this.three.scene.background = texture
-        this.three.scene.backgroundBlurriness = 0.5
+        // this.three.scene.backgroundBlurriness = 0.2
         this.three.scene.environment = texture
         this.render3D()
       })
@@ -176,8 +190,11 @@ export default {
         normalMap: phy.texture({ url: 'textures/dices_n.png' }),
         normalScale: [5, -5]
       })
+
       this.$refs.loadingInstance.setMsg('加载完毕')
       this.$refs.loadingInstance.finish()
+      this.freeAngle()
+      this.game.playBtnAble = true
 
       let i = this.dice.num
       const radius = 2
@@ -248,11 +265,14 @@ export default {
         })
       }
     },
-    defaultAngle() {
+    ingAngle() {
       new TWEEN.Tween(this.three.camera.position).to({ x: 0, y: 15.5, z: 11 }, 1000).start()
     },
-    playAngle() {
-      new TWEEN.Tween(this.three.camera.position).to({ x: 0, y: 30, z: 1 }, 1000).start()
+    readyAngle() {
+      new TWEEN.Tween(this.three.camera.position).to({ x: 0, y: 25, z: 1 }, 1000).start()
+    },
+    freeAngle() {
+      new TWEEN.Tween(this.three.camera.position).to({ x: 0, y: 30, z: 20 }, 1000).start()
     },
     velocity(o) {
       return Math.pow(o.velocity.x ** 2 + o.velocity.y ** 2 + o.velocity.z ** 2, 1 / 2)
@@ -291,6 +311,14 @@ export default {
       this.game.downFlag = false
       if (this.game.status === this.game.STATUS.READY) {
         this.game.status = this.game.STATUS.ING
+        if (this.game.judgeTimer) {
+          clearTimeout(this.game.judgeTimer)
+        }
+        this.game.judgeFlag = false
+        this.game.judgeTimer = setTimeout(() => {
+          this.game.judgeFlag = true
+          this.game.judgeTimer = null
+        }, 3000)
       }
     },
     move(e) {
@@ -323,7 +351,33 @@ export default {
       document.addEventListener('touchend', this.up)
       document.addEventListener('mousemove', this.move)
       document.addEventListener('touchmove', this.move)
-      this.defaultAngle()
+      this.game.settlementJudgeTimer = setInterval(this.settlementJudgeFn, 500)
+    },
+    settlementJudgeFn() {
+      if (this.game.status === this.game.STATUS.ING) {
+        let out = false
+        let sleep = true
+        this.dice.data.forEach((item) => {
+          if (item.position.y < -4) {
+            out = true
+          }
+          if (item.sleep === false) {
+            sleep = false
+          }
+        })
+        if (out) {
+          this.game.status = this.game.STATUS.FREE
+          this.judgeResult(true)
+        } else if (sleep || this.game.judgeFlag) {
+          this.game.status = this.game.STATUS.FREE
+          this.judgeResult(false)
+        }
+      }
+    },
+    judgeResult(out) {},
+    play() {
+      this.game.playBtnAble = false
+      this.game.status = this.game.STATUS.READY
     }
   },
   mounted() {
@@ -335,7 +389,7 @@ export default {
     // controls.addEventListener('change', function () {
     //   console.log(camera.position)
     // })
-    setInterval(() => console.log(this.dice.data), 1000)
+    // setInterval(() => console.log(this.dice.data), 1000)
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.onWindowResize)
@@ -345,13 +399,30 @@ export default {
     document.removeEventListener('touchend', this.up)
     document.removeEventListener('mousemove', this.move)
     document.removeEventListener('touchmove', this.move)
+    clearInterval(this.game.settlementJudgeTimer)
   },
   render() {
     return (
       <>
         <Loading ref="loadingInstance"></Loading>
         <Menu></Menu>
-        <div ref="game"></div>
+        <div ref="game">
+          <div className="result absolute w-full text-center top-20 select-none font-bold text-8xl text-yellow-400">
+            {this.game.result.text}
+          </div>
+          <div className="absolute flex justify-center w-full bottom-16">
+            <Transition name="fade">
+              <button
+                className="Btn select-none font-bold text-3xl"
+                v-show={this.game.playBtnAble}
+                onClick={this.play}
+                disabled={!this.game.playBtnAble}
+              >
+                博一把
+              </button>
+            </Transition>
+          </div>
+        </div>
       </>
     )
   }
