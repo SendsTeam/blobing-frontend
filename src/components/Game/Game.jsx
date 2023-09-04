@@ -36,8 +36,8 @@ export default {
         judgeFlag: false,
         judgeTimer: null,
         result: {
-          text: '状元',
-          points: 0
+          text: '',
+          score: 0
         },
         playBtnAble: false
       },
@@ -232,6 +232,7 @@ export default {
           always: false
         })
       }
+      this.judgeResult()
     },
     collisionCallback(index, data) {
       if (data.hit) {
@@ -375,19 +376,67 @@ export default {
       }
     },
     judgeResult(out) {
+      if (out) {
+        return (this.game.result.text = '跳猴')
+      }
+      const points = this.countPoints()
+      // situation
+      if (points.p4 === 4 && points.p2 === 2) {
+        return (this.game.result.text = '状元插金花')
+      } else if (points.p4 === 6) {
+        return (this.game.result.text = '状元六杯红')
+      } else if (points.p1 === 6) {
+        return (this.game.result.text = '状元遍地锦')
+      } else if (points.p4 === 5 && points.p1 === 1) {
+        return (this.game.result.text = '五红')
+      } else if (points.p2 === 5) {
+        return (this.game.result.text = '五子登科')
+      } else if (points.p4 === 4) {
+        return (this.game.result.text = '四点红')
+      } else if (
+        points.p1 === 1 &&
+        points.p2 === 1 &&
+        points.p3 === 1 &&
+        points.p4 === 1 &&
+        points.p5 === 1 &&
+        points.p6 === 1
+      ) {
+        return (this.game.result.text = '对堂')
+      } else if (points.p4 === 3) {
+        return (this.game.result.text = '三红')
+      } else if (points.p2 === 4) {
+        return (this.game.result.text = '四进')
+      } else if (points.p4 === 2) {
+        return (this.game.result.text = '二举')
+      } else if (points.p4 === 1) {
+        return (this.game.result.text = '一秀')
+      } else {
+        return (this.game.result.text = '虾米拢某')
+      }
+    },
+    countPoints() {
+      const points = {
+        p1: 0,
+        p2: 0,
+        p3: 0,
+        p4: 0,
+        p5: 0,
+        p6: 0
+      }
       this.dice.data.forEach((item) => {
-        console.log(this.getPointsByRotation(item.quaternion))
+        points['p' + this.getPointsByRotation(item.quaternion)]++
       })
+      return points
     },
     getPointsByRotation(quaternion) {
       // 定义骰子的面和点数的映射关系
       const faceMapping = {
-        1: [0, 1, 0], // 上面的点数为1，对应的法向量为(0, 1, 0)
-        2: [0, 0, 1], // 正面的点数为2，对应的法向量为(0, 0, -1)
-        3: [1, 0, 0], // 右面的点数为3，对应的法向量为(1, 0, 0)
-        4: [-1, 0, 0], // 左面的点数为4，对应的法向量为(-1, 0, 0)
-        5: [0, 0, -1], // 背面的点数为5，对应的法向量为(0, 0, 1)
-        6: [0, -1, 0] // 下面的点数为6，对应的法向量为(0, -1, 0)
+        1: [0, 1, 0],
+        2: [0, 0, 1],
+        3: [1, 0, 0],
+        4: [-1, 0, 0],
+        5: [0, 0, -1],
+        6: [0, -1, 0]
       }
 
       let closestFace = null
@@ -445,7 +494,7 @@ export default {
         <Loading ref="loadingInstance"></Loading>
         <Menu></Menu>
         <div ref="game">
-          <div className="result absolute w-full text-center top-20 select-none font-bold text-8xl text-yellow-400">
+          <div className="result absolute w-full text-center top-20 select-none text-7xl text-yellow-400">
             {this.game.result.text}
           </div>
           <div className="absolute flex justify-center w-full bottom-16">
