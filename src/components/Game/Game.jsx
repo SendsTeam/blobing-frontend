@@ -164,7 +164,7 @@ export default {
       })
     },
     phyCallback() {
-      phy.set({ substep: 2, gravity: [0, -100, 0], fps: 120, full: true })
+      this.setGravity(100)
       this.$refs.loadingInstance.setMsg('2/2 :加载模型ing...')
       phy.load(['Bowl/bowl.glb', 'Dice/dice.glb'], this.modelLoadedCallback, 'models/')
     },
@@ -318,7 +318,7 @@ export default {
         this.game.judgeTimer = setTimeout(() => {
           this.game.judgeFlag = true
           this.game.judgeTimer = null
-        }, 3000)
+        }, 8000)
       }
     },
     move(e) {
@@ -374,7 +374,16 @@ export default {
         }
       }
     },
-    judgeResult(out) {},
+    judgeResult(out) {
+      this.dice.data.forEach((item) => {
+        let rotation = new THREE.Euler().setFromQuaternion(item.quaternion)
+        console.log(this.getPointsByRotation(rotation))
+      })
+    },
+    getPointsByRotation(rotation) {
+      // 根据欧拉角的范围判断点数
+  
+    },
     play() {
       this.game.playBtnAble = false
       this.game.status = this.game.STATUS.READY
