@@ -318,7 +318,7 @@ export default {
         this.game.judgeTimer = setTimeout(() => {
           this.game.judgeFlag = true
           this.game.judgeTimer = null
-        }, 8000)
+        }, 3000)
       }
     },
     move(e) {
@@ -376,13 +376,42 @@ export default {
     },
     judgeResult(out) {
       this.dice.data.forEach((item) => {
-        let rotation = new THREE.Euler().setFromQuaternion(item.quaternion)
-        console.log(this.getPointsByRotation(rotation))
+        console.log(this.getPointsByRotation(item.quaternion))
       })
     },
-    getPointsByRotation(rotation) {
-      // 根据欧拉角的范围判断点数
-  
+    getPointsByRotation(quaternion) {
+      // 定义骰子的面和点数的映射关系
+      const faceMapping = {
+        1: [0, 1, 0], // 上面的点数为1，对应的法向量为(0, 1, 0)
+        2: [0, 0, 1], // 正面的点数为2，对应的法向量为(0, 0, -1)
+        3: [1, 0, 0], // 右面的点数为3，对应的法向量为(1, 0, 0)
+        4: [-1, 0, 0], // 左面的点数为4，对应的法向量为(-1, 0, 0)
+        5: [0, 0, -1], // 背面的点数为5，对应的法向量为(0, 0, 1)
+        6: [0, -1, 0] // 下面的点数为6，对应的法向量为(0, -1, 0)
+      }
+
+      let closestFace = null
+      let closestDotProduct = -Infinity
+
+      // 创建一个欧拉角旋转矩阵
+      const rotationMatrix = new THREE.Matrix4().makeRotationFromQuaternion(quaternion)
+
+      // 遍历骰子的面，计算欧拉角旋转后的法向量与每个面的法向量的点积
+      for (const face in faceMapping) {
+        const faceNormal = faceMapping[face]
+        const rotatedNormal = new THREE.Vector3().fromArray(faceNormal).applyMatrix4(rotationMatrix)
+
+        // 计算点积
+        const dotProduct = new THREE.Vector3(0, 1, 0).dot(rotatedNormal)
+
+        // 找到点积最接近1的面
+        if (dotProduct > closestDotProduct) {
+          closestDotProduct = dotProduct
+          closestFace = face
+        }
+      }
+
+      return closestFace
     },
     play() {
       this.game.playBtnAble = false
