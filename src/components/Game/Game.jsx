@@ -232,7 +232,6 @@ export default {
           always: false
         })
       }
-      this.judgeResult()
     },
     collisionCallback(index, data) {
       if (data.hit) {
@@ -311,6 +310,18 @@ export default {
     up(e) {
       this.game.downFlag = false
       if (this.game.status === this.game.STATUS.READY) {
+        const force = this.getThrowForceScale()
+        if (force > 0) {
+          let i = this.dice.num
+          while (i--) {
+            phy.change({
+              name: 'diceInstance' + i,
+              force: [0, -force * 30, 0],
+              forceMode: 'velocity',
+              reset: true
+            })
+          }
+        }
         this.game.status = this.game.STATUS.ING
         if (this.game.judgeTimer) {
           clearTimeout(this.game.judgeTimer)
@@ -465,6 +476,19 @@ export default {
     play() {
       this.game.playBtnAble = false
       this.game.status = this.game.STATUS.READY
+    },
+    getThrowForceScale() {
+      if (this.$refs.progress) {
+        const styles = window.getComputedStyle(this.$refs.progress, '::before')
+        let value = styles.getPropertyValue('inset').split(' ')[1].split('px')[0]
+        if (!Number(value)) value = 0
+        else
+          value =
+            1 -
+            value /
+              window.getComputedStyle(this.$refs.progress).getPropertyValue('width').split('px')[0]
+        return value
+      } else return 0
     }
   },
   mounted() {
@@ -494,7 +518,17 @@ export default {
         <Loading ref="loadingInstance"></Loading>
         <Menu></Menu>
         <div ref="game">
-          <div className="result absolute w-full text-center top-20 select-none text-7xl text-yellow-400">
+          <div
+            v-show={this.game.status === this.game.STATUS.READY && this.game.downFlag}
+            className="flex justify-center top-20 relative"
+          >
+            <div ref="progress" className="progress"></div>
+            <div className="absolute font-semibold text-2xl text-white select-none">投掷力度</div>
+          </div>
+          <div
+            v-show={this.game.status === this.game.STATUS.FREE}
+            className="result absolute w-full text-center top-20 select-none text-7xl text-yellow-400"
+          >
             {this.game.result.text}
           </div>
           <div className="absolute flex justify-center w-full bottom-16">
