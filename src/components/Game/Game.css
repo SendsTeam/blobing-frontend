@@ -74,11 +74,12 @@
 
 @font-face {
   font-family: 'ResultFont';
-  src: url('/fonts/AaFuLuBangShu-2.ttf') format('truetype');
+  src: url('/fonts/fontzipMin.woff');
 }
 
 .result {
   font-family: 'ResultFont';
+  -webkit-text-stroke: 1px black;
 }
 
 .progress {
