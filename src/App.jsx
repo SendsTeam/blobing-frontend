@@ -1,5 +1,5 @@
 import './App.css'
-import Game from './components/Game/Game.jsx'
+import Game from './pages/Game/Game.jsx'
 
 export default {
   render() {
