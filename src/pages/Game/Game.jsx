@@ -1,6 +1,9 @@
-import './Game.css'
 import Loading from '../../components/Loading/Loading.jsx'
-import Menu from '../../components/Menu/Menu.jsx'
+import Bgm from '../../components/Bgm/Bgm.jsx'
+import Result from '../../components/Result/Result.jsx'
+import Rank from '../../components/Rank/Rank.jsx'
+import Progress from '../../components/Progress/Progress.jsx'
+import PlayBtn from '../../components/PlayBtn/PlayBtn.jsx'
 
 import { Transition } from 'vue'
 import * as THREE from 'three'
@@ -37,7 +40,7 @@ export default {
         judgeFlag: false,
         judgeTimer: null,
         result: {
-          text: '闽南博饼',
+          text: '中秋博饼',
           score: 0
         },
         playBtnAble: false,
@@ -113,7 +116,7 @@ export default {
       // stats
       this.three.renderStats = new Stats()
       this.three.renderStats.domElement.style.zIndex = 100
-      container.appendChild(this.three.renderStats.domElement)
+      // container.appendChild(this.three.renderStats.domElement)
 
       // controls
       this.three.controls = new OrbitControls(this.three.camera, this.three.renderer.domElement)
@@ -125,16 +128,16 @@ export default {
       this.three.controls.update()
 
       // light
-      const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.2)
       this.three.scene.add(ambientLight)
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 3)
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 2)
       directionalLight.position.set(2, 2, 0.5)
       directionalLight.castShadow = true
       this.three.scene.add(directionalLight)
 
       // background
       this.$refs.loadingInstance.setMsg('1/2 :加载背景ing...')
-      new RGBELoader().load('/textures/moonlit_golf_2k.hdr', (texture) => {
+      new RGBELoader().load('/textures/moonlit_golf_2k-_1_.hdr', (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping
         this.three.scene.background = texture
         // this.three.scene.backgroundBlurriness = 0.2
@@ -300,7 +303,7 @@ export default {
       if (this.game.desktopMode) {
         pos = { x: 0, y: 12, z: 12 }
       } else {
-        pos = { x: 0, y: 16, z: 16 }
+        pos = { x: 0, y: 21, z: 20 }
       }
       new TWEEN.Tween(this.three.camera.position).to(pos, 1000).start()
     },
@@ -340,7 +343,7 @@ export default {
     up(e) {
       this.game.downFlag = false
       if (this.game.status === this.game.STATUS.READY) {
-        const force = this.getThrowForceScale()
+        const force = this.$refs.progress.getThrowForceScale()
         if (force > 0) {
           let i = this.dice.num
           while (i--) {
@@ -516,19 +519,6 @@ export default {
     play() {
       this.game.playBtnAble = false
       this.game.status = this.game.STATUS.READY
-    },
-    getThrowForceScale() {
-      if (this.$refs.progress) {
-        const styles = window.getComputedStyle(this.$refs.progress, '::before')
-        let value = styles.getPropertyValue('inset').split(' ')[1].split('px')[0]
-        if (!Number(value)) value = 0
-        else
-          value =
-            1 -
-            value /
-              window.getComputedStyle(this.$refs.progress).getPropertyValue('width').split('px')[0]
-        return value
-      } else return 0
     }
   },
   mounted() {
@@ -538,9 +528,9 @@ export default {
     this.phyInit()
     this.gameInit()
     // alert(window.screen.width)
-    this.three.controls.addEventListener('change', () => {
-      console.log(this.three.camera.position)
-    })
+    // this.three.controls.addEventListener('change', () => {
+    //   console.log(this.three.camera.position)
+    // })
     // setInterval(() => console.log(this.dice.data), 1000)
   },
   beforeUnmount() {
@@ -555,47 +545,26 @@ export default {
   },
   render() {
     return (
-      <>
+      <div ref="game">
         <Loading ref="loadingInstance"></Loading>
-        <Menu></Menu>
-        <div ref="game">
-          <div
-            v-show={this.game.status === this.game.STATUS.READY && this.game.downFlag}
-            className="flex justify-center top-28 relative"
-          >
-            <div ref="progress" className="progress"></div>
-            <div className="absolute font-semibold text-xl text-white select-none">投掷力度</div>
-          </div>
-          <div
-            v-show={this.game.status === this.game.STATUS.FREE}
-            className="result absolute w-full text-center top-28 select-none text-6xl lg:text-8xl text-yellow-400"
-          >
-            {this.game.result.text}
-          </div>
-          <div className="absolute flex justify-center w-full bottom-16">
-            <Transition name="fade">
-              <button
-                className="Btn select-none font-bold text-3xl"
-                v-show={this.game.playBtnAble}
-                onClick={this.play}
-                disabled={!this.game.playBtnAble}
-              >
-                博一把
-              </button>
-            </Transition>
-          </div>
-          {/* <div className="absolute w-40 h-40 bg-white right-0 overflow-scroll">
-            <ul>
-              {Object.entries(this.game.total).map(([key, value]) => (
-                <li key={key}>
-                  <strong>{key}: </strong>
-                  {value}
-                </li>
-              ))}
-            </ul>
-          </div> */}
-        </div>
-      </>
+        <Bgm className="right-10 top-10"></Bgm>
+        <Result
+          v-show={this.game.status === this.game.STATUS.FREE}
+          className="top-24"
+          resultText={this.game.result.text}
+        ></Result>
+        <Progress
+          v-show={this.game.status === this.game.STATUS.READY && this.game.downFlag}
+          className="top-32"
+          ref="progress"
+        ></Progress>
+        <Rank v-show={this.game.status === this.game.STATUS.FREE} className="top-56"></Rank>
+        <PlayBtn
+          v-show={this.game.status === this.game.STATUS.FREE}
+          onClick={this.play}
+          className="bottom-28"
+        ></PlayBtn>
+      </div>
     )
   }
 }
