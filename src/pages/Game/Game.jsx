@@ -1,9 +1,12 @@
 import Loading from '../../components/Loading/Loading.jsx'
+import Cloud from '../../components/Cloud/Cloud.jsx'
 import Bgm from '../../components/Bgm/Bgm.jsx'
 import Result from '../../components/Result/Result.jsx'
 import Rank from '../../components/Rank/Rank.jsx'
 import Progress from '../../components/Progress/Progress.jsx'
 import PlayBtn from '../../components/PlayBtn/PlayBtn.jsx'
+import Rule from '../../components/Rule/Rule.jsx'
+import Copyright from '../../components/Copyright/Copyright.jsx'
 
 import { Transition } from 'vue'
 import * as THREE from 'three'
@@ -547,7 +550,8 @@ export default {
     return (
       <div ref="game">
         <Loading ref="loadingInstance"></Loading>
-        <Bgm className="right-10 top-10"></Bgm>
+        <Cloud></Cloud>
+        <Bgm v-show={this.game.status === this.game.STATUS.FREE} className="right-10 top-10"></Bgm>
         <Result
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-24"
@@ -564,6 +568,11 @@ export default {
           onClick={this.play}
           className="bottom-28"
         ></PlayBtn>
+        <Rule v-show={this.game.status === this.game.STATUS.FREE} className="bottom-16"></Rule>
+        <Copyright
+          v-show={this.game.status === this.game.STATUS.FREE}
+          className="bottom-8"
+        ></Copyright>
       </div>
     )
   }
