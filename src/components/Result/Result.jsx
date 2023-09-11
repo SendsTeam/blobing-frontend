@@ -15,7 +15,7 @@ export default {
     return (
       <div
         className={
-          'result absolute w-full text-center font-normal text-8xl lg:text-9xl ' + this.className
+          'result absolute w-full text-center font-normal text-7xl md:text-8xl ' + this.className
         }
       >
         {this.resultText}

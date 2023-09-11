@@ -1,3 +1,5 @@
+import './Rule.css'
+
 export default {
   props: {
     className: {
@@ -5,15 +7,25 @@ export default {
       default: ''
     }
   },
+  methods: {
+    openRule() {
+      console.log(6)
+    }
+  },
   render() {
     return (
-      <div
-        className={
-          'absolute w-full text-center text-white underline cursor-pointer text-xl ' +
-          this.className
-        }
-      >
-        了解规则
+      <div>
+        <div
+          className={
+            'absolute w-full text-center text-white underline text-xl flex justify-center ' +
+            this.className
+          }
+        >
+          <div onClick={this.openRule} className="cursor-pointer">
+            了解规则
+          </div>
+        </div>
+        {/* <div className="container w-full h-full absolute "></div> */}
       </div>
     )
   }

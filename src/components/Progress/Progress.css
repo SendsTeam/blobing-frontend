@@ -2,7 +2,7 @@
   width: 20rem;
   height: 1.75rem;
   border-radius: 20px;
-  color: #f4bf00;
+  color: #fffcb9;
   border: 2px solid;
   position: absolute;
 }
@@ -13,7 +13,7 @@
   margin: 2px;
   inset: 0 100% 0 0;
   border-radius: inherit;
-  background: #f4bf00;
+  background: #fffcb9;
   animation: p6 2s infinite linear;
 }
 
@@ -21,4 +21,9 @@
   50% {
     inset: 0;
   }
+}
+
+.tips {
+  -webkit-text-stroke: 0.5px #fffcb9;
+  color: #f24a4a;
 }

@@ -7,6 +7,7 @@ import Progress from '../../components/Progress/Progress.jsx'
 import PlayBtn from '../../components/PlayBtn/PlayBtn.jsx'
 import Rule from '../../components/Rule/Rule.jsx'
 import Copyright from '../../components/Copyright/Copyright.jsx'
+import Notify from '../../components/Notify/Notify.jsx'
 
 import { Transition } from 'vue'
 import * as THREE from 'three'
@@ -439,7 +440,9 @@ export default {
         } else if (points.p4 === 5 || points.p1 === 5) {
           result = '五红'
         } else if (points.p2 === 5 || points.p3 === 5 || points.p5 === 5 || points.p6 === 5) {
-          result = '五子登科'
+          if (points.p4 === 1) {
+            result = '五子带一秀'
+          } else result = '五子登科'
         } else if (points.p4 === 4) {
           result = '状元'
         } else if (
@@ -454,7 +457,11 @@ export default {
         } else if (points.p4 === 3) {
           result = '三红'
         } else if (points.p2 === 4 || points.p3 === 4 || points.p5 === 4 || points.p6 === 4) {
-          result = '四进'
+          if (points.p4 === 2) {
+            result = '四进带二举'
+          } else if (points.p4 === 1) {
+            result = '四进带一秀'
+          } else result = '四进'
         } else if (points.p4 === 2) {
           result = '二举'
         } else if (points.p4 === 1) {
@@ -551,7 +558,7 @@ export default {
       <div ref="game">
         <Loading ref="loadingInstance"></Loading>
         <Cloud></Cloud>
-        <Bgm v-show={this.game.status === this.game.STATUS.FREE} className="right-10 top-10"></Bgm>
+        <Bgm v-show={this.game.status === this.game.STATUS.FREE} className="right-5 top-5"></Bgm>
         <Result
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-24"
@@ -562,17 +569,21 @@ export default {
           className="top-32"
           ref="progress"
         ></Progress>
-        <Rank v-show={this.game.status === this.game.STATUS.FREE} className="top-56"></Rank>
+        <Rank
+          v-show={this.game.status === this.game.STATUS.FREE}
+          className="top-44 md:top-48"
+        ></Rank>
+        <Notify
+          v-show={this.game.status === this.game.STATUS.FREE && false}
+          className="top-56 md:top-60"
+        ></Notify>
         <PlayBtn
           v-show={this.game.status === this.game.STATUS.FREE}
-          onClick={this.play}
+          onBtnClick={this.play}
           className="bottom-28"
         ></PlayBtn>
+        <Copyright className="bottom-8"></Copyright>
         <Rule v-show={this.game.status === this.game.STATUS.FREE} className="bottom-16"></Rule>
-        <Copyright
-          v-show={this.game.status === this.game.STATUS.FREE}
-          className="bottom-8"
-        ></Copyright>
       </div>
     )
   }

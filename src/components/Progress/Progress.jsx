@@ -31,7 +31,7 @@ export default {
     return (
       <div className={'flex justify-center relative ' + this.className}>
         <div ref="progress" className="progress"></div>
-        <div className="absolute font-semibold text-xl text-white ">投掷力度</div>
+        <div className="tips absolute font-semibold text-xl  ">投掷力度</div>
       </div>
     )
   }

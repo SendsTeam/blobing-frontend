@@ -1,12 +1,13 @@
 .playBtn {
   width: 250px;
-  height: 80px;
+  height: 60px;
   background: linear-gradient(180deg, #fffcb9 0%, #f8ffec 100%);
 }
 .mountain {
-  background: url('/img/mountain.png') no-repeat center;
+  background: url('/img/mountain.png') no-repeat 100%;
   color: #fff;
-  font-size: 47px;
+  font-family: STLiti, 'MainFont';
+  font-size: 36px;
   font-weight: 400;
   -webkit-text-stroke: 2px #6d352e;
 }
@@ -15,6 +16,6 @@
   height: 6.8125rem;
   background: url('/img/rabbit.png') no-repeat center;
   position: absolute;
-  top: -1rem;
+  top: -2rem;
   left: -2rem;
 }
