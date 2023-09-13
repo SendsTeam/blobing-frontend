@@ -1,3 +1,10 @@
-.container {
+.wrapper {
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.scroll div {
+  background: url('/img/lantern.png') no-repeat;
+}
+.scroll img {
+  max-height: 100vh;
 }

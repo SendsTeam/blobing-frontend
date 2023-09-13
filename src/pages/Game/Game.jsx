@@ -558,7 +558,7 @@ export default {
       <div ref="game">
         <Loading ref="loadingInstance"></Loading>
         <Cloud></Cloud>
-        <Bgm v-show={this.game.status === this.game.STATUS.FREE} className="right-5 top-5"></Bgm>
+        <Bgm v-show={this.game.status === this.game.STATUS.FREE} className="right-5 top-5 z-40"></Bgm>
         <Result
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-24"

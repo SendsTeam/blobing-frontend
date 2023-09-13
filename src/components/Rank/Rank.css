@@ -2,3 +2,43 @@
   color: #f24a4a;
   -webkit-text-stroke: 1px #fffcb9;
 }
+
+.rank-container {
+  background: url('/img/lantern.png') center no-repeat;
+}
+
+.rank-title {
+  color: #f24a4a;
+  -webkit-text-stroke: 2px #fffcb9;
+}
+
+.rank-item-container {
+  overflow-y: auto;
+  /* background-color: #fff; */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rank-item {
+  background-color: #faffee;
+}
+
+.rank-about-me {
+  background-color: red;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rank-number {
+  color: #f53333;
+  font-size: 20px;
+}
+
+.rank-name {
+  font-size: 28px;
+}
+
+.rank-points {
+  color: #f53333;
+  font-size: 28px;
+}
