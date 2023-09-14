@@ -19,26 +19,48 @@
   transform: translateX(-50%);
 }
 
-.rank-item {
-  background-color: #faffee;
+::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
 }
 
-.rank-about-me {
-  background-color: red;
-  left: 50%;
-  transform: translateX(-50%);
+::-webkit-scrollbar-track {
+  width: 6px;
+  background: rgba(#101f1c, 0.1);
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
 }
 
-.rank-number {
-  color: #f53333;
-  font-size: 20px;
+::-webkit-scrollbar-thumb {
+  background-color: rgba(144, 147, 153, 0.5);
+  background-clip: padding-box;
+  min-height: 28px;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+  transition: background-color 0.3s;
+  cursor: pointer;
 }
 
-.rank-name {
-  font-size: 28px;
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(144, 147, 153, 0.3);
 }
 
-.rank-points {
-  color: #f53333;
-  font-size: 28px;
+.rankOp-move, /* 对移动中的元素应用的过渡 */
+.rankOp-enter-active,
+.rankOp-leave-active {
+  transition: all 0.5s ease;
+}
+
+.rankOp-enter-from,
+.rankOp-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+/* 确保将离开的元素从布局流中删除
+  以便能够正确地计算移动的动画。 */
+.rankOp-leave-active {
+  position: absolute;
 }

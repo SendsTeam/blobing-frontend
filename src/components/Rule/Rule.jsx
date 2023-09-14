@@ -1,11 +1,17 @@
 import './Rule.css'
 import ReturnBtn from '../ReturnBtn/ReturnBtn.jsx'
+import { Transition } from 'vue'
 
 export default {
   props: {
     className: {
       type: String,
       default: ''
+    },
+    loadFinish: {
+      type: Boolean,
+      required: true,
+      default: false
     }
   },
   data() {
@@ -26,7 +32,8 @@ export default {
       <div>
         <div
           className={
-            'absolute w-full text-center text-white underline text-xl flex justify-center ' +
+            (this.loadFinish ? 'bgm-fade-in-ani ' : '') +
+            'absolute opacity-0 w-full text-center text-white underline text-xl flex justify-center ' +
             this.className
           }
         >
@@ -34,19 +41,21 @@ export default {
             了解规则
           </div>
         </div>
-        <div
-          v-show={this.showRule}
-          className="wrapper top-0 bottom-0 left-0 right-0 absolute flex justify-center items-center backdrop-blur-sm"
-        >
-          <div className="scroll relative pointer-events-none">
-            <div className="absolute w-1/2 h-full left-0 -z-0"></div>
-            <div className="absolute w-1/2 h-full right-0 -z-0"></div>
-            <img className="z-10 relative" src="/img/scroll.png" alt="scroll" />
+
+        <Transition name="fade">
+          <div
+            v-show={this.showRule}
+            className="wrapper top-0 bottom-0 left-0 right-0 absolute flex justify-center items-center backdrop-blur-sm"
+          >
+            <div className="scroll relative  pointer-events-none">
+              <img className="z-10 rule-zoom-in-ani relative" src="/img/scroll.png" alt="scroll" />
+            </div>
           </div>
-        </div>
+        </Transition>
+
         <ReturnBtn
           v-show={this.showRule}
-          className="top-5 left-5 z-40"
+          className="rule-zoom-in-ani top-5 left-5 z-40"
           onReturn={this.closeRule}
         ></ReturnBtn>
       </div>

@@ -9,13 +9,19 @@ export default {
     className: {
       type: String,
       default: ''
+    },
+    loadFinish: {
+      type: Boolean,
+      default: false
     }
   },
   render() {
     return (
       <div
         className={
-          'result absolute w-full text-center font-normal text-7xl md:text-8xl ' + this.className
+          (this.loadFinish ? 'result-zoom-in-ani ' : '') +
+          'result absolute w-full text-center font-normal text-7xl md:text-8xl ' +
+          this.className
         }
       >
         {this.resultText}

@@ -1,0 +1,35 @@
+.rank-item {
+  background-color: #faffee;
+}
+
+.rank-item-roll {
+  animation: roll 3s linear infinite;
+}
+
+@keyframes roll {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.rank-about-me {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .rank-number {
+    color: #f53333;
+    font-size: 20px;
+  }
+  
+  .rank-name {
+    font-size: 28px;
+  }
+  
+  .rank-points {
+    color: #f53333;
+    font-size: 28px;
+  }

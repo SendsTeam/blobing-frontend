@@ -9,7 +9,6 @@ import Rule from '../../components/Rule/Rule.jsx'
 import Copyright from '../../components/Copyright/Copyright.jsx'
 import Notify from '../../components/Notify/Notify.jsx'
 
-import { Transition } from 'vue'
 import * as THREE from 'three'
 import * as TWEEN from '@tweenjs/tween.js'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
@@ -33,6 +32,7 @@ export default {
   data() {
     return {
       game: {
+        loadFinish: false,
         STATUS: {
           FREE: 'free',
           READY: 'ready',
@@ -212,6 +212,7 @@ export default {
 
       this.$refs.loadingInstance.setMsg('加载完毕')
       this.$refs.loadingInstance.finish()
+      this.game.loadFinish = true
       this.freeAngle()
       this.game.playBtnAble = true
 
@@ -456,7 +457,13 @@ export default {
           result = '对堂'
         } else if (points.p4 === 3) {
           result = '三红'
-        } else if (points.p2 === 4 || points.p3 === 4 || points.p5 === 4 || points.p6 === 4) {
+        } else if (
+          points.p1 === 4 ||
+          points.p2 === 4 ||
+          points.p3 === 4 ||
+          points.p5 === 4 ||
+          points.p6 === 4
+        ) {
           if (points.p4 === 2) {
             result = '四进带二举'
           } else if (points.p4 === 1) {
@@ -557,12 +564,17 @@ export default {
     return (
       <div ref="game">
         <Loading ref="loadingInstance"></Loading>
-        <Cloud></Cloud>
-        <Bgm v-show={this.game.status === this.game.STATUS.FREE} className="right-5 top-5 z-40"></Bgm>
+        <Cloud loadFinish={this.game.loadFinish}></Cloud>
+        <Bgm
+          v-show={this.game.status === this.game.STATUS.FREE}
+          className="right-5 top-5"
+          loadFinish={this.game.loadFinish}
+        ></Bgm>
         <Result
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-24"
           resultText={this.game.result.text}
+          loadFinish={this.game.loadFinish}
         ></Result>
         <Progress
           v-show={this.game.status === this.game.STATUS.READY && this.game.downFlag}
@@ -572,6 +584,7 @@ export default {
         <Rank
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-44 md:top-48"
+          loadFinish={this.game.loadFinish}
         ></Rank>
         <Notify
           v-show={this.game.status === this.game.STATUS.FREE && false}
@@ -581,9 +594,14 @@ export default {
           v-show={this.game.status === this.game.STATUS.FREE}
           onBtnClick={this.play}
           className="bottom-28"
+          loadFinish={this.game.loadFinish}
         ></PlayBtn>
         <Copyright className="bottom-8"></Copyright>
-        <Rule v-show={this.game.status === this.game.STATUS.FREE} className="bottom-16"></Rule>
+        <Rule
+          v-show={this.game.status === this.game.STATUS.FREE}
+          className="bottom-16"
+          loadFinish={this.game.loadFinish}
+        ></Rule>
       </div>
     )
   }

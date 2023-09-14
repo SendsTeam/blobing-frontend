@@ -19,3 +19,33 @@
   top: -2rem;
   left: -2rem;
 }
+
+.playBtnContainer {
+  opacity: 0;
+}
+
+@keyframes rabbit-shake {
+  0% {
+    transform: translateX(0) rotate(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-2px) rotate(-10deg);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(2px) rotate(10deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+}
+
+.rabbit-shake-ani {
+  animation: rabbit-shake 5s infinite;
+}

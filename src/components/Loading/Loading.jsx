@@ -24,7 +24,7 @@ export default {
   render() {
     return (
       <Transition mode="out-in" name="fade">
-        <div v-show={this.isLoading} className="fixed w-full h-full backdrop-blur-md z-50">
+        <div v-show={this.isLoading} className="absolute w-full h-full backdrop-blur-md z-50">
           <div className="loader"></div>
           <TransitionGroup name="list">
             <div

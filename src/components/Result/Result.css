@@ -1,4 +1,21 @@
 .result {
   -webkit-text-stroke: 2px #6d352e;
   color: #fffcb9;
+  transform: scale(0);
+}
+
+@keyframes result-zoom-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.result-zoom-in-ani {
+  animation: result-zoom-in 1.5s ease forwards;
 }

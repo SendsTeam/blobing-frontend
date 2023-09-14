@@ -1,0 +1,33 @@
+@keyframes left-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes right-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.left-in-ani {
+  animation: left-in 1s ease-out forwards;
+}
+
+.right-in-ani {
+  animation: right-in 1s ease-out forwards;
+}
+
+.cloud-left {
+  transform: translateX(-100%);
+}
+
+.cloud-right {
+  transform: translateX(100%);
+}

@@ -1,10 +1,25 @@
 .wrapper {
   background-color: rgba(0, 0, 0, 0.4);
+  background-image: url('/img/lantern.png');
 }
 
-.scroll div {
-  background: url('/img/lantern.png') no-repeat;
-}
 .scroll img {
-  max-height: 100vh;
+  max-height: 80vh;
+}
+
+.rule-fade-in-ani {
+  animation: bgm-fade-in .5s ease forwards;
+}
+
+@keyframes rule-zoom-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.rule-zoom-in-ani{
+  animation: rule-zoom-in .5s ease forwards;
 }

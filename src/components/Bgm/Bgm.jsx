@@ -1,8 +1,14 @@
+import './Bgm.css'
+
 export default {
   props: {
     className: {
       type: String,
       default: ''
+    },
+    loadFinish: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -32,12 +38,17 @@ export default {
   },
   render() {
     return (
-      <div onClick={this.clickHandle} className={'inline-block absolute ' + this.className}>
+      <button
+        onClick={this.clickHandle}
+        className={
+          (this.loadFinish ? 'rule-zoom-in-ani ' : 'scale-0 ') + 'inline-block absolute ' + this.className
+        }
+      >
         <img src={this.isPlaying ? '/icon/music.svg' : '/icon/music_off.svg'} alt="icon" />
         <audio loop autoplay ref="bgmController">
           <source src="/sounds/bgm.mp3" type="audio/mpeg"></source>
         </audio>
-      </div>
+      </button>
     )
   }
 }
