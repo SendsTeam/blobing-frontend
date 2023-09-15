@@ -1,14 +1,23 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Game from '../pages/Game/Game.jsx'
+import { isInWechat } from '../utils/tokenAndWxlogin.js'
+import Wechat from '../pages/Wechat/Wechat.jsx'
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Game
+      component: import('../pages/Game/Game.jsx')
     },
+    {
+      path: '/wechat',
+      name: 'wechat',
+      component: Wechat
+    }
   ]
 })
-
+router.beforeEach((to, from, next) => {
+  if (to.path == '/wechat' || isInWechat()) next()
+  else router.push('/wechat')
+})
 export default router
