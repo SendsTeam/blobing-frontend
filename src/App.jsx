@@ -1,11 +1,11 @@
 import './App.css'
-import Game from './pages/Game/Game.jsx'
+import { RouterView } from 'vue-router'
 
 export default {
   render() {
     return (
       <>
-        <Game></Game>
+        <RouterView></RouterView>
       </>
     )
   }
