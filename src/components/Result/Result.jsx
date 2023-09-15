@@ -24,7 +24,7 @@ export default {
           this.className
         }
       >
-        {this.resultText}
+        <span className=''>{this.resultText}</span>
       </div>
     )
   }

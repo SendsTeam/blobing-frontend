@@ -37,7 +37,7 @@ export default {
             this.className
           }
         >
-          <div onClick={this.openRule} className="cursor-pointer">
+          <div onClick={this.openRule} className="cursor-pointer rank-btn">
             了解规则
           </div>
         </div>

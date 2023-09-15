@@ -565,11 +565,7 @@ export default {
       <div ref="game">
         <Loading ref="loadingInstance"></Loading>
         <Cloud loadFinish={this.game.loadFinish}></Cloud>
-        <Bgm
-          v-show={this.game.status === this.game.STATUS.FREE}
-          className="right-5 top-5"
-          loadFinish={this.game.loadFinish}
-        ></Bgm>
+        <Bgm className="right-5 top-5" loadFinish={this.game.loadFinish}></Bgm>
         <Result
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-24"

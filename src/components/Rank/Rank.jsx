@@ -53,34 +53,38 @@ export default {
             this.className
           }
         >
-          <button onClick={this.openRank}>排行榜</button>
+          <button className="rank-btn" onClick={this.openRank}>
+            排行榜
+          </button>
         </div>
         <Transition name="fade">
           <div
             v-show={this.showRank}
             className="wrapper rank-container top-0 bottom-0 left-0 right-0 absolute backdrop-blur-md z-20"
           >
-            <div className="rank-title w-full text-center mt-24 md:mt-28 text-6xl md:text-7xl mb-4">
-              <button className="rank-arrow-left" onClick={this.leftClick}>
-                <img src="/icon/arrow-left-b.svg" alt="arrow-left" />
-              </button>
-              <TransitionGroup name="rankOp">
-                <div className="inline-block mx-4" key={this.rankIndex}>
-                  {' '}
-                  {this.rankOption[this.rankIndex]}{' '}
-                </div>
-              </TransitionGroup>
-              <button className="rank-arrow-right" onClick={this.rightClick}>
-                <img src="/icon/arrow-right-b.svg" alt="arrow-right" />
-              </button>
-            </div>
-            <div className="rank-item-container w-full absolute top-44 md:top-52 max-w-md bottom-24 px-8">
-              {Array.from({ length: 100 }).map(() => {
-                return <RankItem></RankItem>
-              })}
-            </div>
-            <div className="rank-about-me w-full absolute h-20 bottom-0 max-w-md px-2">
-              <RankItem></RankItem>
+            <div>
+              <div className="rank-title w-full text-center mt-24 md:mt-28 text-6xl md:text-7xl mb-4">
+                <button className="rank-arrow-left" onClick={this.leftClick}>
+                  <img src="/icon/arrow-left-b.svg" alt="arrow-left" />
+                </button>
+                <TransitionGroup name="rankOp">
+                  <div className="inline-block mx-4" key={this.rankIndex}>
+                    {' '}
+                    {this.rankOption[this.rankIndex]}{' '}
+                  </div>
+                </TransitionGroup>
+                <button className="rank-arrow-right" onClick={this.rightClick}>
+                  <img src="/icon/arrow-right-b.svg" alt="arrow-right" />
+                </button>
+              </div>
+              <div className="rank-item-container w-full absolute top-44 md:top-52 max-w-md bottom-24 px-8">
+                {Array.from({ length: 100 }).map(() => {
+                  return <RankItem></RankItem>
+                })}
+              </div>
+              <div className="rank-about-me w-full absolute h-20 bottom-0 max-w-md px-2">
+                <RankItem></RankItem>
+              </div>
             </div>
           </div>
         </Transition>
