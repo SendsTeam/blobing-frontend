@@ -8,7 +8,7 @@
 }
 
 .rule-fade-in-ani {
-  animation: bgm-fade-in .5s ease forwards;
+  animation: bgm-fade-in 0.5s ease forwards;
 }
 
 @keyframes rule-zoom-in {
@@ -20,6 +20,6 @@
   }
 }
 
-.rule-zoom-in-ani{
-  animation: rule-zoom-in .5s ease forwards;
+.rule-zoom-in-ani {
+  animation: rule-zoom-in 0.5s ease forwards;
 }

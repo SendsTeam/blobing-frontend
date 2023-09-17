@@ -1,6 +1,9 @@
 .rank-item {
   background-color: #faffee;
 }
+.rank-item div {
+  line-height: 52px;
+}
 
 .rank-item-roll {
   animation: roll 3s linear infinite;
@@ -16,20 +19,20 @@
 }
 
 .rank-about-me {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .rank-number {
-    color: #f53333;
-    font-size: 20px;
-  }
-  
-  .rank-name {
-    font-size: 28px;
-  }
-  
-  .rank-points {
-    color: #f53333;
-    font-size: 28px;
-  }
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rank-number {
+  color: #f53333;
+  font-size: 20px;
+}
+
+.rank-name {
+  font-size: 28px;
+}
+
+.rank-points {
+  color: #f53333;
+  font-size: 28px;
+}

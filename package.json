@@ -11,8 +11,10 @@
   "dependencies": {
     "@tweenjs/tween.js": "^21.0.0",
     "axios": "^1.5.0",
+    "crypto-js": "^4.1.1",
     "stats.js": "^0.17.0",
     "three": "^0.155.0",
+    "vant": "^4.6.8",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },

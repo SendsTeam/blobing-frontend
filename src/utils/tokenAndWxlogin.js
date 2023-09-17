@@ -23,6 +23,10 @@ const wxRedirect = () => {
     window.location.href = `https://apps.hqu.edu.cn/wechat-hqu/wechatauth.html?proxyTo=authoauth&sendUrl=/connect/oauth2/authorize?appid=wxfe035b066fb1158b&redirect_uri=${encodeURIComponent(`${document.location.origin}`)}&encode_flag=Y&response_type=code&scope=snsapi_userinfo#wechat_redirect`
 }
 
+const bindRedirect = () => {
+    window.location.replace(`https://apps.hqu.edu.cn/wechat-hqu/wechatauth.html?proxyTo=authoauth&sendUrl=/connect/oauth2/authorize?appid=wxfe035b066fb1158b&redirect_uri=${encodeURIComponent("http://wx.sends.cc")}&encode_flag=Y&response_type=code&scope=snsapi_userinfo#wechat_redirect`)
+}
+
 const isInWechat = () => {
     return window.navigator.userAgent.includes('MicroMessenger')
 }
@@ -35,5 +39,5 @@ const getWechatCode = () => {
 
 
 export {
-    setToken, getToken, isLogin, wxRedirect, isInWechat, getWechatCode
+    setToken, getToken, isLogin, wxRedirect, bindRedirect, isInWechat, getWechatCode
 }

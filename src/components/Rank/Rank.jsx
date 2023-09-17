@@ -2,6 +2,7 @@ import './Rank.css'
 import ReturnBtn from '../ReturnBtn/ReturnBtn.jsx'
 import RankItem from '../RankItem/RankItem.jsx'
 import { Transition, TransitionGroup } from 'vue'
+import request from '../../utils/request.js'
 
 export default {
   props: {
@@ -18,12 +19,19 @@ export default {
     return {
       showRank: false,
       rankOption: ['积分日榜', '积分总榜', '天选之榜'],
-      rankIndex: 0
+      rankIndex: 0,
+      rankData: [
+        { all: [], me: [] },
+        { all: [], me: [] },
+        { all: [], me: [] }
+      ]
     }
   },
   methods: {
     openRank() {
       this.showRank = true
+      this.rankIndex = 0
+      this.updateAll()
     },
     closeRank() {
       this.showRank = false
@@ -41,7 +49,40 @@ export default {
       } else {
         this.rankIndex++
       }
+    },
+    async updateDayRank() {
+      const result = await request.dayRank()
+      if (result) {
+        this.rankData[0].all = result.boBingRank
+        this.rankData[0].me = result.BingMyRank
+      }
+    },
+    async updateTop() {
+      const result = await request.top()
+      if (result) {
+        this.rankData[1].all = result.boBingRank
+        this.rankData[1].me = result.BingMyRank
+      }
+    },
+    async updateTianXuan() {
+      const result = await request.tianXuan()
+      if (result) {
+        this.rankData[2].all = result.boBingTianXuan
+      }
+    },
+    async updateAll() {
+      this.updateDayRank()
+      this.updateTianXuan()
+      this.updateTop()
     }
+  },
+  mounted() {
+    this.updateAll()
+    setInterval(() => {
+      if (this.showRank) {
+        this.updateAll()
+      }
+    }, 1000)
   },
   render() {
     return (
@@ -67,24 +108,43 @@ export default {
                 <button className="rank-arrow-left" onClick={this.leftClick}>
                   <img src="/icon/arrow-left-b.svg" alt="arrow-left" />
                 </button>
-                <TransitionGroup name="rankOp">
+                <Transition name="rankOp">
                   <div className="inline-block mx-4" key={this.rankIndex}>
                     {' '}
                     {this.rankOption[this.rankIndex]}{' '}
                   </div>
-                </TransitionGroup>
+                </Transition>
                 <button className="rank-arrow-right" onClick={this.rightClick}>
                   <img src="/icon/arrow-right-b.svg" alt="arrow-right" />
                 </button>
               </div>
               <div className="rank-item-container w-full absolute top-44 md:top-52 max-w-md bottom-24 px-8">
-                {Array.from({ length: 100 }).map(() => {
-                  return <RankItem></RankItem>
-                })}
+                <TransitionGroup name="fadeList">
+                  {this.rankData[this.rankIndex].all.map((item, index) => {
+                    return (
+                      <RankItem
+                        item={item}
+                        index={index}
+                        key={this.rankIndex + '-' + index}
+                        txb={this.rankIndex === 2 ? true : false}
+                      />
+                    )
+                  })}
+                </TransitionGroup>
               </div>
-              <div className="rank-about-me w-full absolute h-20 bottom-0 max-w-md px-2">
-                <RankItem></RankItem>
-              </div>
+              <Transition name="fade" mode="out-in">
+                <div
+                  v-show={this.rankIndex !== 2}
+                  className="rank-about-me w-full absolute h-20 bottom-0 max-w-md px-2"
+                >
+                  <Transition name="fade" mode="out-in">
+                    <RankItem
+                      item={this.rankData[this.rankIndex].me}
+                      key={this.rankIndex}
+                    ></RankItem>
+                  </Transition>
+                </div>
+              </Transition>
             </div>
           </div>
         </Transition>

@@ -5,7 +5,9 @@ export default {
   render() {
     return (
       <>
-        <RouterView></RouterView>
+        <div>
+          <RouterView></RouterView>
+        </div>
       </>
     )
   }

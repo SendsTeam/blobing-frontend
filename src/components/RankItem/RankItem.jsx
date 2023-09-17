@@ -5,23 +5,60 @@ export default {
     txb: {
       type: Boolean,
       default: false
+    },
+    item: {
+      type: Object,
+      required: true
+    },
+    index: {
+      type: Number,
+      default: null
     }
   },
-  mounted() {
-    if (this.$refs.name.clientWidth > this.$refs.name.parentNode.clientWidth) {
-      this.$refs.name.classList.add('rank-item-roll')
+  methods: {
+    formatTimestamp(stamp) {
+      const date = new Date(stamp * 1000) // 将时间戳转换为毫秒
+
+      const month = (date.getMonth() + 1).toString().padStart(2, '0') // 获取月份，并补齐两位
+      const day = date.getDate().toString().padStart(2, '0') // 获取日期，并补齐两位
+      const hours = date.getHours().toString().padStart(2, '0') // 获取小时，并补齐两位
+      const minutes = date.getMinutes().toString().padStart(2, '0') // 获取分钟，并补齐两位
+      const seconds = date.getSeconds().toString().padStart(2, '0') // 获取秒，并补齐两位
+
+      const formatted = `${month}-${day} ${hours}:${minutes}:${seconds}`
+      return formatted
     }
   },
   render() {
     return (
-      <div className="rank-item w-full mb-2 h-[52px] rounded-[18px] flex justify-between items-center px-4">
-        <span className="rank-number">第1名</span>
-        <span className="rank-name max-w-[50%] overflow-hidden rounded-3xl">
-          <div ref="name" className="w-fit whitespace-nowrap">
-            一只修购12
+      <div>
+        {this.txb ? (
+          <div className="rank-item w-full mb-2 h-[104px] rounded-[18px] px-4">
+            <div className="rank-points w-full h-1/2 text-center">
+              {this.formatTimestamp(this.item.time.seconds)}
+            </div>
+            <div className="w-full h-1/2 flex justify-around items-center">
+              <span className="rank-name max-w-[50%] overflow-hidden rounded-3xl">
+                <div className="w-full whitespace-nowrap text-ellipsis overflow-hidden">
+                  {this.item.nickName}
+                </div>
+              </span>
+              <span className="rank-points">{this.item.types}</span>
+            </div>
           </div>
-        </span>
-        <span className="rank-points">81分</span>
+        ) : (
+          <div className="rank-item w-full mb-2 h-[52px] rounded-[18px] flex justify-between items-center px-4">
+            <span className="rank-number">
+              第{this.index !== null ? this.index + 1 : this.item.rank + 1}名
+            </span>
+            <span className="rank-name max-w-[50%] overflow-hidden rounded-3xl">
+              <div className="w-full whitespace-nowrap text-ellipsis overflow-hidden">
+                {this.item.nickName}
+              </div>
+            </span>
+            <span className="rank-points">{this.item.score ? this.item.score : 0}分</span>
+          </div>
+        )}
       </div>
     )
   }

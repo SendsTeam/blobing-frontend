@@ -1,6 +1,5 @@
 import Loading from '../../components/Loading/Loading.jsx'
 import Cloud from '../../components/Cloud/Cloud.jsx'
-import Bgm from '../../components/Bgm/Bgm.jsx'
 import Result from '../../components/Result/Result.jsx'
 import Rank from '../../components/Rank/Rank.jsx'
 import Progress from '../../components/Progress/Progress.jsx'
@@ -8,6 +7,7 @@ import PlayBtn from '../../components/PlayBtn/PlayBtn.jsx'
 import Rule from '../../components/Rule/Rule.jsx'
 import Copyright from '../../components/Copyright/Copyright.jsx'
 import Notify from '../../components/Notify/Notify.jsx'
+import Count from '../../components/Count/Count.jsx'
 
 import * as THREE from 'three'
 import * as TWEEN from '@tweenjs/tween.js'
@@ -16,6 +16,10 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
 import Stats from 'stats.js'
 import { phy } from '../../utils/Phy.module.js'
 import { isDesktop } from '../../utils/device.js'
+
+import { showNotify } from 'vant'
+import request from '../../utils/request.js'
+import { encrypt } from '../../utils/crypto.js'
 
 export default {
   setup() {
@@ -44,11 +48,28 @@ export default {
         judgeFlag: false,
         judgeTimer: null,
         result: {
-          text: '中秋博饼',
-          score: 0
+          index: 0,
+          type: [
+            '中秋博饼',
+            '跳猴',
+            '虾米拢某',
+            '一秀',
+            '二举',
+            '四进',
+            '四进带二举',
+            '四进带一秀',
+            '三红',
+            '对堂',
+            '状元',
+            '五子登科',
+            '五子带一秀',
+            '五红',
+            '六抔黑',
+            '六抔红',
+            '状元插金花'
+          ]
         },
         playBtnAble: false,
-        total: {},
         desktopMode: false
       },
       dice: {
@@ -59,6 +80,9 @@ export default {
           soundTime: [],
           sound: []
         }
+      },
+      bgm: {
+        sound: null
       }
     }
   },
@@ -115,6 +139,16 @@ export default {
           this.dice.collisionSound.sound[i].setLoop(false)
           this.dice.collisionSound.sound[i].setVolume(1)
         }
+      })
+
+      let bgmListener = new THREE.AudioListener()
+      this.three.camera.add(bgmListener)
+      new THREE.AudioLoader().load('sounds/bgm.mp3', (buffer) => {
+        this.bgm.sound = new THREE.Audio(bgmListener)
+        this.bgm.sound.setBuffer(buffer)
+        this.bgm.sound.setLoop(true)
+        this.bgm.sound.setVolume(0.2)
+        this.bgm.sound.play()
       })
 
       // stats
@@ -419,33 +453,35 @@ export default {
         if (out) {
           this.game.status = this.game.STATUS.FREE
           this.judgeResult(true)
+          this.postData()
         } else if (sleep || this.game.judgeFlag) {
           this.game.status = this.game.STATUS.FREE
           this.judgeResult(false)
+          this.postData()
         }
       }
     },
     judgeResult(out) {
       let result
       if (out) {
-        result = '跳猴'
+        result = 1
       } else {
         const points = this.countPoints()
         // situation
         if (points.p4 === 4 && points.p1 === 2) {
-          result = '状元插金花'
+          result = 16
         } else if (points.p4 === 6 || points.p1 === 6) {
-          result = '六抔红'
+          result = 15
         } else if (points.p2 === 6 || points.p3 === 6 || points.p5 === 6 || points.p6 === 6) {
-          result = '六抔黑'
+          result = 14
         } else if (points.p4 === 5 || points.p1 === 5) {
-          result = '五红'
+          result = 13
         } else if (points.p2 === 5 || points.p3 === 5 || points.p5 === 5 || points.p6 === 5) {
           if (points.p4 === 1) {
-            result = '五子带一秀'
-          } else result = '五子登科'
+            result = 12
+          } else result = 11
         } else if (points.p4 === 4) {
-          result = '状元'
+          result = 10
         } else if (
           points.p1 === 1 &&
           points.p2 === 1 &&
@@ -454,9 +490,9 @@ export default {
           points.p5 === 1 &&
           points.p6 === 1
         ) {
-          result = '对堂'
+          result = 9
         } else if (points.p4 === 3) {
-          result = '三红'
+          result = 8
         } else if (
           points.p1 === 4 ||
           points.p2 === 4 ||
@@ -465,25 +501,19 @@ export default {
           points.p6 === 4
         ) {
           if (points.p4 === 2) {
-            result = '四进带二举'
+            result = 6
           } else if (points.p4 === 1) {
-            result = '四进带一秀'
-          } else result = '四进'
+            result = 7
+          } else result = 5
         } else if (points.p4 === 2) {
-          result = '二举'
+          result = 4
         } else if (points.p4 === 1) {
-          result = '一秀'
+          result = 3
         } else {
-          result = '虾米拢某'
+          result = 2
         }
       }
-      let count = this.game.total[result]
-      if (count) {
-        this.game.total[result] = count + 1
-      } else {
-        this.game.total[result] = 1
-      }
-      this.game.result.text = result
+      this.game.result.index = result
     },
     countPoints() {
       const points = {
@@ -536,6 +566,28 @@ export default {
     play() {
       this.game.playBtnAble = false
       this.game.status = this.game.STATUS.READY
+    },
+    getDetail() {
+      let detail = []
+      this.dice.data.forEach((item) => {
+        let obj = {}
+        obj.position = item.position
+        obj.quaternion = item.quaternion
+        detail.push(obj)
+      })
+      return JSON.stringify(detail, null, '')
+    },
+    async postData() {
+      let key = await request.key()
+      if (!key) return false
+      let points = this.game.result.index.toString()
+      points = encrypt(points, key)
+      let detail = this.getDetail()
+      detail = encrypt(detail, key)
+      const result = await request.publish(detail, points)
+      console.log(result)
+      this.$refs.count.updateCount()
+      return true
     }
   },
   mounted() {
@@ -565,11 +617,11 @@ export default {
       <div ref="game">
         <Loading ref="loadingInstance"></Loading>
         <Cloud loadFinish={this.game.loadFinish}></Cloud>
-        <Bgm className="right-5 top-5" loadFinish={this.game.loadFinish}></Bgm>
+        <Count ref="count" className="left-5 top-6"></Count>
         <Result
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-24"
-          resultText={this.game.result.text}
+          resultText={this.game.result.type[this.game.result.index]}
           loadFinish={this.game.loadFinish}
         ></Result>
         <Progress
