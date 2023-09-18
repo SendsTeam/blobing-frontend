@@ -1,24 +1,13 @@
 .notify {
-  background: rgba(234, 204, 155, 0.5);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  /* background: rgba(234, 204, 155, 0.2); */
+  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
   left: 50%;
   transform: translateX(-50%);
 }
 
-.normal-para {
-  color: #6d352e;
-  font-size: 20px;
-  -webkit-text-stroke: 0.2px #fffcb9;
-}
-
-.level {
-  font-size: 24px;
-  color: #f53333;
-  -webkit-text-stroke: 0.2px #fffcb9;
-}
-
-.user {
-  font-size: 24px;
-  color: #f53333;
-  -webkit-text-stroke: 0.2px #fffcb9;
+.notify-text span {
+  font-size: 20px !important;
+  color: #f24a4a !important;
+  font-weight:500 !important;
+  -webkit-text-stroke: .5px #6d352e !important;
 }

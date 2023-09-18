@@ -1,6 +1,6 @@
 import './Notify.css'
-import { NoticeBar } from 'vant'
-import 'vant/es/notice-bar/style'
+import { Barrage } from 'vant'
+import 'vant/es/barrage/style'
 import request from '../../utils/request.js'
 import { getToken } from '../../utils/tokenAndWxlogin.js'
 
@@ -17,9 +17,10 @@ export default {
   },
   data() {
     return {
-      message: [],
+      messageQueue: [],
       wsInstance: null,
-      connectFlag: false
+      connectFlag: false,
+      id: 0
     }
   },
   watch: {
@@ -30,17 +31,13 @@ export default {
     }
   },
   methods: {
-    sendMsg(ciphertext, name, type) {
+    sendMsg(ciphertext, type) {
       const param = {
         ciphertext,
-        message: JSON.stringify({
-          name,
-          type
-        }),
+        message: type,
         token: getToken()
       }
-      console.log(param)
-      this.wsInstance.send(param)
+      this.wsInstance.send(JSON.stringify(param))
     },
     ws() {
       this.wsInstance = null
@@ -51,9 +48,9 @@ export default {
         this.connectFlag = true
         console.log('ws connect')
       }
-      this.wsInstance.onclose = () => {
+      this.wsInstance.onclose = (ev) => {
         this.connectFlag = false
-        console.log('ws disconnect')
+        console.log('ws disconnect: ', ev)
         this.wsInstance = null
       }
       this.wsInstance.onerror = (error) => {
@@ -63,29 +60,33 @@ export default {
         this.connectFlag = false
       }
       this.wsInstance.onmessage = (msg) => {
-        this.message.push(msg)
-        console.log(msg)
+        this.messageQueue.push({ id: this.id, text: msg.data })
+        this.id++
+        console.log(msg.data)
+        // alert(msg.data)
       }
     }
   },
   mounted() {
     this.ws()
+    setInterval(() => {
+      if (!this.connectFlag) {
+        this.ws()
+      }
+    }, 2000)
   },
   render() {
     return (
       <div
         className={
           (this.loadFinish ? 'bgm-fade-in-ani ' : '') +
-          'notify absolute w-full max-w-md h-[40px] md:rounded-full text-center flex justify-center items-center opacity-0 overflow-hidden ' +
+          'notify absolute w-full h-[150px] text-center flex justify-center items-center opacity-0 overflow-hidden ' +
           this.className
         }
       >
-        <NoticeBar className="w-full h-full" scrollable>
-          <div className="normal-para font-semibold md:font-medium">
-            恭喜幸运用户 <span className="user">燕博远</span> 运气大爆发 掷出{' '}
-            <span className="level">状元插金花</span> !
-          </div>
-        </NoticeBar>
+        <Barrage className="notify-text" v-model={this.messageQueue} rows={4} duration={8000}>
+          <div className=" w-screen h-[150px]"></div>
+        </Barrage>
       </div>
     )
   }

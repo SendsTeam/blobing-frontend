@@ -46,7 +46,7 @@ axiosInstance.interceptors.response.use(
         return response
     },
     error => {
-        if (error.response.data.code) {
+        if (error.response.data && error.response.data.code) {
             showNotify({ type: 'danger', message: error.response.data.msg })
             if (error.response.data.code === 401) {
                 setToken('')

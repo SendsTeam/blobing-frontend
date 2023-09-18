@@ -470,15 +470,15 @@ export default {
           }
         })
         if (out) {
-          this.game.status = this.game.STATUS.FREE
           this.resultSound.play()
           this.judgeResult(true)
           this.postData()
-        } else if (sleep || this.game.judgeFlag) {
           this.game.status = this.game.STATUS.FREE
+        } else if (sleep || this.game.judgeFlag) {
           this.resultSound.play()
           this.judgeResult(false)
           this.postData()
+          this.game.status = this.game.STATUS.FREE
         }
       }
     },
@@ -606,12 +606,9 @@ export default {
       let detail = this.getDetail()
       detail = encrypt(detail, key)
       const result = await request.publish(detail, points)
-      console.log(result)
-      // this.$refs.ws.sendMsg(
-      //   result.ciphertext,
-      //   this.$refs.rank.rankData[0].me.nickName,
-      //   this.game.result.type[this.game.result.index]
-      // )
+      if (result.ciphertext) {
+        this.$refs.ws.sendMsg(result.ciphertext, this.game.result.type[this.game.result.index])
+      }
       this.$refs.count.updateCount()
       return true
     }
@@ -658,13 +655,13 @@ export default {
         <Rank
           ref="rank"
           v-show={this.game.status === this.game.STATUS.FREE}
-          className="top-44 md:top-48"
+          className="top-48 md:top-52"
           loadFinish={this.game.loadFinish}
         ></Rank>
         <Notify
           ref="ws"
-          v-show={this.game.status === this.game.STATUS.FREE}
-          className="top-56 md:top-60"
+          // v-show={this.game.status === this.game.STATUS.FREE}
+          className="top-0"
           loadFinish={this.game.loadFinish}
         ></Notify>
         <PlayBtn
