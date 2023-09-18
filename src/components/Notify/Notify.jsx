@@ -1,6 +1,8 @@
 import './Notify.css'
 import { NoticeBar } from 'vant'
 import 'vant/es/notice-bar/style'
+import request from '../../utils/request.js'
+import { getToken } from '../../utils/tokenAndWxlogin.js'
 
 export default {
   props: {
@@ -15,8 +17,59 @@ export default {
   },
   data() {
     return {
-      message: ['1', '2']
+      message: [],
+      wsInstance: null,
+      connectFlag: false
     }
+  },
+  watch: {
+    connectFlag(value) {
+      if (!value) {
+        this.ws()
+      }
+    }
+  },
+  methods: {
+    sendMsg(ciphertext, name, type) {
+      const param = {
+        ciphertext,
+        message: JSON.stringify({
+          name,
+          type
+        }),
+        token: getToken()
+      }
+      console.log(param)
+      this.wsInstance.send(param)
+    },
+    ws() {
+      this.wsInstance = null
+      this.connectFlag = false
+      this.wsInstance = request.broadcast()
+      // console.log(this.wsInstance)
+      this.wsInstance.onopen = () => {
+        this.connectFlag = true
+        console.log('ws connect')
+      }
+      this.wsInstance.onclose = () => {
+        this.connectFlag = false
+        console.log('ws disconnect')
+        this.wsInstance = null
+      }
+      this.wsInstance.onerror = (error) => {
+        this.wsInstance.close()
+        console.log('ws error', error)
+        this.wsInstance = null
+        this.connectFlag = false
+      }
+      this.wsInstance.onmessage = (msg) => {
+        this.message.push(msg)
+        console.log(msg)
+      }
+    }
+  },
+  mounted() {
+    this.ws()
   },
   render() {
     return (

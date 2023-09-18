@@ -220,11 +220,57 @@ request.top = async function () {
 // /boBing/broadcast
 
 // ws
-try { const socket = new WebSocket(WS, [token]) }
-catch (error) {
-    console.log(error)
+// try { const socket = new WebSocket(WS, [token]) }
+// catch (error) {
+//     console.log(error)
+// }
+
+// class Broadcast {
+//     addr = WS
+//     token = null
+//     socketInstance = null
+//     connectFlag = false
+//     messageFn = null
+
+//     connect() {
+//         this.token = getToken()
+//         this.socketInstance = new WebSocket(this.addr, [this.token])
+//         this.socketInstance.onopen(() => {
+//             console.log('ws connect')
+//             this.connectFlag = true
+//         })
+//         this.socketInstance.onclose(() => {
+//             console.log('ws disconnect')
+//             this.connectFlag = false
+//         })
+//         this.socketInstance.onerror((err) => {
+//             console.log('ws error: ', err)
+//             this.connectFlag = false
+//             this.socketInstance.close()
+//         })
+//     }
+//     reset() {
+//         this.token = null
+//         this.socketInstance = null
+//         this.connectFlag = false
+//         this.messageFn = null
+//     }
+//     onMessage(messageFn) {
+//         this.messageFn = messageFn
+//         this.socketInstance.onmessage(this.messageFn)
+//     }
+//     send(ciphertext, message) {
+//         this.socketInstance.send({
+//             ciphertext,
+//             message,
+//             token: this.token
+//         })
+//     }
+// }
+
+
+request.broadcast = function () {
+    return new WebSocket(WS, [token])
 }
-
-
 
 export default request

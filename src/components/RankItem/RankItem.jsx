@@ -49,7 +49,7 @@ export default {
         ) : (
           <div className="rank-item w-full mb-2 h-[52px] rounded-[18px] flex justify-between items-center px-4">
             <span className="rank-number">
-              第{this.index !== null ? this.index + 1 : this.item.rank + 1}名
+              第{this.index !== null ? this.index + 1 : this.item.rank}名
             </span>
             <span className="rank-name max-w-[50%] overflow-hidden rounded-3xl">
               <div className="w-full whitespace-nowrap text-ellipsis overflow-hidden">

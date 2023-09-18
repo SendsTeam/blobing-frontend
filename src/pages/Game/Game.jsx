@@ -83,7 +83,9 @@ export default {
       },
       bgm: {
         sound: null
-      }
+      },
+      touchSound: null,
+      resultSound: null
     }
   },
   watch: {
@@ -149,6 +151,22 @@ export default {
         this.bgm.sound.setLoop(true)
         this.bgm.sound.setVolume(0.2)
         this.bgm.sound.play()
+      })
+
+      let touchListener = new THREE.AudioListener()
+      this.three.camera.add(touchListener)
+      new THREE.AudioLoader().load('sounds/touch.wav', (buffer) => {
+        this.touchSound = new THREE.Audio(touchListener)
+        this.touchSound.setBuffer(buffer)
+        this.touchSound.setVolume(0.2)
+      })
+
+      let popListener = new THREE.AudioListener()
+      this.three.camera.add(popListener)
+      new THREE.AudioLoader().load('sounds/pop.mp3', (buffer) => {
+        this.resultSound = new THREE.Audio(popListener)
+        this.resultSound.setBuffer(buffer)
+        this.resultSound.setVolume(1)
       })
 
       // stats
@@ -374,6 +392,7 @@ export default {
     },
     //game logic
     down(e) {
+      this.touchSound.play()
       this.game.downFlag = true
       if (this.game.status === this.game.STATUS.READY) {
         this.movePos(e)
@@ -452,10 +471,12 @@ export default {
         })
         if (out) {
           this.game.status = this.game.STATUS.FREE
+          this.resultSound.play()
           this.judgeResult(true)
           this.postData()
         } else if (sleep || this.game.judgeFlag) {
           this.game.status = this.game.STATUS.FREE
+          this.resultSound.play()
           this.judgeResult(false)
           this.postData()
         }
@@ -586,6 +607,11 @@ export default {
       detail = encrypt(detail, key)
       const result = await request.publish(detail, points)
       console.log(result)
+      // this.$refs.ws.sendMsg(
+      //   result.ciphertext,
+      //   this.$refs.rank.rankData[0].me.nickName,
+      //   this.game.result.type[this.game.result.index]
+      // )
       this.$refs.count.updateCount()
       return true
     }
@@ -630,11 +656,13 @@ export default {
           ref="progress"
         ></Progress>
         <Rank
+          ref="rank"
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-44 md:top-48"
           loadFinish={this.game.loadFinish}
         ></Rank>
         <Notify
+          ref="ws"
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-56 md:top-60"
           loadFinish={this.game.loadFinish}

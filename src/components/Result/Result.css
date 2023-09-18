@@ -18,4 +18,5 @@
 
 .result-zoom-in-ani {
   animation: result-zoom-in 1.5s ease forwards;
+  animation-delay: 0.5s;
 }
