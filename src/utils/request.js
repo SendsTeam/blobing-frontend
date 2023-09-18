@@ -220,7 +220,7 @@ request.top = async function () {
 // /boBing/broadcast
 
 // ws
-try { const socket = new WebSocket(WS, token) }
+try { const socket = new WebSocket(WS, [token]) }
 catch (error) {
     console.log(error)
 }
