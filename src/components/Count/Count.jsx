@@ -37,6 +37,9 @@ export default {
   async mounted() {
     await request.init()
     this.updateCount()
+    setInterval(() => {
+      this.updateCount()
+    }, 500)
   },
   render() {
     return (

@@ -8,16 +8,17 @@
 .normal-para {
   color: #6d352e;
   font-size: 20px;
-  font-weight: 600;
-  -webkit-text-stroke: 0.4px #fffcb9;
+  -webkit-text-stroke: 0.2px #fffcb9;
 }
 
 .level {
+  font-size: 24px;
   color: #f53333;
-  -webkit-text-stroke: 0.5px #fffcb9;
+  -webkit-text-stroke: 0.2px #fffcb9;
 }
 
 .user {
+  font-size: 24px;
   color: #f53333;
-  -webkit-text-stroke: 0.5px #fffcb9;
+  -webkit-text-stroke: 0.2px #fffcb9;
 }

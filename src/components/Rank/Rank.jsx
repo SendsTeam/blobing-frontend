@@ -78,11 +78,11 @@ export default {
   },
   mounted() {
     this.updateAll()
-    setInterval(() => {
-      if (this.showRank) {
-        this.updateAll()
-      }
-    }, 1000)
+    // setInterval(() => {
+    //   if (this.showRank) {
+    //     this.updateAll()
+    //   }
+    // }, 1000)
   },
   render() {
     return (
@@ -132,19 +132,16 @@ export default {
                   })}
                 </TransitionGroup>
               </div>
-              <Transition name="fade" mode="out-in">
-                <div
-                  v-show={this.rankIndex !== 2}
-                  className="rank-about-me w-full absolute h-20 bottom-0 max-w-md px-2"
-                >
-                  <Transition name="fade" mode="out-in">
+              <div className="rank-about-me w-full absolute h-20 bottom-0 max-w-md px-2">
+                <Transition name="fade" mode="out-in">
+                  {this.rankIndex != 2 && (
                     <RankItem
                       item={this.rankData[this.rankIndex].me}
                       key={this.rankIndex}
                     ></RankItem>
-                  </Transition>
-                </div>
-              </Transition>
+                  )}
+                </Transition>
+              </div>
             </div>
           </div>
         </Transition>

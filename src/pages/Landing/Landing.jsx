@@ -10,7 +10,7 @@ export default {
       if (wechatCode) {
         console.log(wechatCode)
         if (await request.login(wechatCode)) {
-          this.$router.push('/game')
+          location.reload()
         }
       } else {
         wxRedirect()

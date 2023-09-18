@@ -5,6 +5,9 @@ import router from '../router/index.js'
 
 
 const URL = import.meta.env.VITE_APP_APIBASE
+const WS = import.meta.env.VITE_APP_WS
+const token = getToken()
+
 const axiosInstance = axios.create({
     baseURL: URL,
     timeout: 3000,
@@ -14,7 +17,6 @@ const axiosInstance = axios.create({
 // 请求拦截器
 axiosInstance.interceptors.request.use(
     config => {
-        const token = getToken()
         if (token) {
             config.headers.token = token
         }
@@ -77,6 +79,7 @@ request.login = async function (code) {
             wxRedirect()
         }
     } catch (error) {
+        // alert(code)
         console.log(error)
         wxRedirect()
     }
@@ -213,6 +216,15 @@ request.top = async function () {
         return null
     }
 }
+
+// /boBing/broadcast
+
+// ws
+try { const socket = new WebSocket(WS, token) }
+catch (error) {
+    console.log(error)
+}
+
 
 
 export default request

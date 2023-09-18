@@ -38,12 +38,12 @@ export default {
               {this.formatTimestamp(this.item.time.seconds)}
             </div>
             <div className="w-full h-1/2 flex justify-around items-center">
-              <span className="rank-name max-w-[50%] overflow-hidden rounded-3xl">
+              <span className="rank-name max-w-[50%] overflow-hidden rounded-3xl w-1/2 h-full text-center">
                 <div className="w-full whitespace-nowrap text-ellipsis overflow-hidden">
                   {this.item.nickName}
                 </div>
               </span>
-              <span className="rank-points">{this.item.types}</span>
+              <span className="rank-points w-1/2 h-full text-center">{this.item.types}</span>
             </div>
           </div>
         ) : (

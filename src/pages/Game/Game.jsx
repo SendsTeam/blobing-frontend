@@ -169,13 +169,13 @@ export default {
       const ambientLight = new THREE.AmbientLight(0xffffff, 1.2)
       this.three.scene.add(ambientLight)
       const directionalLight = new THREE.DirectionalLight(0xffffff, 2)
-      directionalLight.position.set(2, 2, 0.5)
+      directionalLight.position.set(2, 2, 1.2)
       directionalLight.castShadow = true
       this.three.scene.add(directionalLight)
 
       // background
       this.$refs.loadingInstance.setMsg('1/2 :加载背景ing...')
-      new RGBELoader().load('/textures/moonlit_golf_2k-_1_.hdr', (texture) => {
+      new RGBELoader().load('/textures/kloppenheim_02_puresky_1k.hdr', (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping
         this.three.scene.background = texture
         // this.three.scene.backgroundBlurriness = 0.2
@@ -322,27 +322,27 @@ export default {
     ingAngle() {
       let pos
       if (this.game.desktopMode) {
-        pos = { x: 0, y: 9, z: 6 }
+        pos = { x: -4, y: 6, z: -2 }
       } else {
-        pos = { x: 0, y: 15, z: 10 }
+        pos = { x: -8, y: 12, z: -6 }
       }
       new TWEEN.Tween(this.three.camera.position).to(pos, 1000).start()
     },
     readyAngle() {
       let pos
       if (this.game.desktopMode) {
-        pos = { x: 0, y: 15, z: 1 }
+        pos = { x: -0.9, y: 15, z: -0.6 }
       } else {
-        pos = { x: 0, y: 25, z: 1 }
+        pos = { x: -0.9, y: 25, z: -0.6 }
       }
       new TWEEN.Tween(this.three.camera.position).to(pos, 1000).start()
     },
     freeAngle() {
       let pos
       if (this.game.desktopMode) {
-        pos = { x: 0, y: 12, z: 12 }
+        pos = { x: -8, y: 12, z: -6 }
       } else {
-        pos = { x: 0, y: 21, z: 20 }
+        pos = { x: -14, y: 16, z: -10 }
       }
       new TWEEN.Tween(this.three.camera.position).to(pos, 1000).start()
     },
@@ -635,8 +635,9 @@ export default {
           loadFinish={this.game.loadFinish}
         ></Rank>
         <Notify
-          v-show={this.game.status === this.game.STATUS.FREE && false}
+          v-show={this.game.status === this.game.STATUS.FREE}
           className="top-56 md:top-60"
+          loadFinish={this.game.loadFinish}
         ></Notify>
         <PlayBtn
           v-show={this.game.status === this.game.STATUS.FREE}
