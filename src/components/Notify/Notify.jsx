@@ -80,12 +80,14 @@ export default {
       <div
         className={
           (this.loadFinish ? 'bgm-fade-in-ani ' : '') +
-          'notify absolute w-full h-[150px] text-center flex justify-center items-center opacity-0 overflow-hidden ' +
+          'notify absolute w-screen h-screen text-center flex justify-center items-center opacity-0 overflow-hidden ' +
           this.className
         }
       >
-        <Barrage className="notify-text" v-model={this.messageQueue} rows={4} duration={8000}>
-          <div className=" w-screen h-[150px]"></div>
+        <Barrage className="notify-text" v-model={this.messageQueue} rows={20} duration={8000}>
+          <div className=" w-screen h-screen">
+            
+          </div>
         </Barrage>
       </div>
     )

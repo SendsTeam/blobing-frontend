@@ -8,6 +8,7 @@ import Rule from '../../components/Rule/Rule.jsx'
 import Copyright from '../../components/Copyright/Copyright.jsx'
 import Notify from '../../components/Notify/Notify.jsx'
 import Count from '../../components/Count/Count.jsx'
+import Relay from '../../components/Relay/Relay.jsx'
 
 import * as THREE from 'three'
 import * as TWEEN from '@tweenjs/tween.js'
@@ -421,7 +422,7 @@ export default {
         this.game.judgeTimer = setTimeout(() => {
           this.game.judgeFlag = true
           this.game.judgeTimer = null
-        }, 3000)
+        }, 5000)
       }
     },
     move(e) {
@@ -606,8 +607,11 @@ export default {
       let detail = this.getDetail()
       detail = encrypt(detail, key)
       const result = await request.publish(detail, points)
-      if (result.ciphertext) {
-        this.$refs.ws.sendMsg(result.ciphertext, this.game.result.type[this.game.result.index])
+      if (result.data && result.data.ciphertext) {
+        this.$refs.ws.sendMsg(result.data.ciphertext, this.game.result.type[this.game.result.index])
+      }
+      if (result.msg && result.msg !== 'success') {
+        showNotify({ type: 'warning', message: result.msg })
       }
       this.$refs.count.updateCount()
       return true
@@ -640,7 +644,14 @@ export default {
       <div ref="game">
         <Loading ref="loadingInstance"></Loading>
         <Cloud loadFinish={this.game.loadFinish}></Cloud>
+        <Notify
+          ref="ws"
+          // v-show={this.game.status === this.game.STATUS.FREE}
+          className="top-0"
+          loadFinish={this.game.loadFinish}
+        ></Notify>
         <Count ref="count" className="left-5 top-6"></Count>
+        <Relay className="right-5 top-6"></Relay>
         <Result
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-24"
@@ -658,12 +669,6 @@ export default {
           className="top-48 md:top-52"
           loadFinish={this.game.loadFinish}
         ></Rank>
-        <Notify
-          ref="ws"
-          // v-show={this.game.status === this.game.STATUS.FREE}
-          className="top-0"
-          loadFinish={this.game.loadFinish}
-        ></Notify>
         <PlayBtn
           v-show={this.game.status === this.game.STATUS.FREE}
           onBtnClick={this.play}

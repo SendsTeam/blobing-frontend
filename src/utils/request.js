@@ -131,7 +131,7 @@ request.publish = async function (detail, points) {
     try {
         const result = await axiosInstance.post('/boBing/publish', { detail, points })
         if (result.data.code === 1000) {
-            return result.data.data
+            return result.data
         } else {
             return null
         }
@@ -271,6 +271,21 @@ request.top = async function () {
 
 request.broadcast = function () {
     return new WebSocket(WS, [token])
+}
+
+//jssdk
+request.jssdk = async function (url) {
+    try {
+        const result = await axiosInstance.post('/user/jssdk', { url })
+        if (result.data.code === 1000) {
+            return result.data.data
+        } else {
+            return null
+        }
+    } catch (error) {
+        console.log(error)
+        return null
+    }
 }
 
 export default request
