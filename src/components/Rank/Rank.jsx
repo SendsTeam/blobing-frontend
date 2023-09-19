@@ -52,21 +52,21 @@ export default {
     },
     async updateDayRank() {
       const result = await request.dayRank()
-      if (result) {
+      if (result && result.boBingRank && result.BingMyRank) {
         this.rankData[0].all = result.boBingRank
         this.rankData[0].me = result.BingMyRank
       }
     },
     async updateTop() {
       const result = await request.top()
-      if (result) {
+      if (result && result.boBingRank && result.BingMyRank) {
         this.rankData[1].all = result.boBingRank
         this.rankData[1].me = result.BingMyRank
       }
     },
     async updateTianXuan() {
       const result = await request.tianXuan()
-      if (result) {
+      if (result && result.boBingTianXuan) {
         this.rankData[2].all = result.boBingTianXuan
       }
     },
