@@ -8,14 +8,9 @@ const wechatShareConfig = {
     desc: '快来一起试试吧！有机会赢取线下博饼机会哦！', // 分享描述
     link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
     imgUrl: import.meta.env.VITE_APP_SHARE_PICTURE, // 分享图标
-    success: async function () {
+    complete: async function () {
         const result = await request.addCount()
-        showNotify({ type: 'warning', message: result })
-    },
-    cancel: function () {
-        showNotify({ type: 'warning', message: '分享失败！' })
-    },
-    complete: function () {
+        showNotify({ type: 'warning', message: result, duration: 5000 })
         console.log('share complete')
     }
 }
