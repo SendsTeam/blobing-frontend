@@ -36,7 +36,7 @@ deploy:
     - ssh -p 4242 ubuntu@hidden bash /home/ubuntu/2023blobing/runfronted.sh
 
 upload to cdn:
-  stage: flushcache
+  stage: upload to cdn
   image: rclone/rclone
   script:
     - rclone -P --config ./rclone/rclone.conf sync ./dist/ sendss3:public-cdn-1309039959/blobingcdn
