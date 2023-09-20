@@ -4,7 +4,7 @@
   background: linear-gradient(180deg, #fffcb9 0%, #f8ffec 100%);
 }
 .mountain {
-  background: url('/img/mountain.png') no-repeat 100%;
+  background: url('https://cdn.sends.cc/blobing/img/mountain.png') no-repeat 100%;
   color: #fff;
   /* font-family: STLiti; */
   font-size: 36px;
@@ -14,7 +14,7 @@
 .rabbit {
   width: 6rem;
   height: 6.8125rem;
-  background: url('/img/rabbit.png') no-repeat center;
+  background: url('https://cdn.sends.cc/blobing/img/rabbit.png') no-repeat center;
   position: absolute;
   top: -2rem;
   left: -2rem;

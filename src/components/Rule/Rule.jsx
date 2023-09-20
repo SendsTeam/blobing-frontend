@@ -48,7 +48,7 @@ export default {
             className="wrapper top-0 bottom-0 left-0 right-0 absolute flex justify-center items-center backdrop-blur-sm"
           >
             <div className="scroll relative  pointer-events-none">
-              <img className="z-10 rule-zoom-in-ani relative" src="/img/scroll.png" alt="scroll" />
+              <img className="z-10 rule-zoom-in-ani relative" src="https://cdn.sends.cc/blobing/img/scroll.png" alt="scroll" />
             </div>
           </div>
         </Transition>
