@@ -3,7 +3,6 @@ default:
 stages:
   - build
   - deploy
-  - upload to cdn
   - flushcache
 
 cache:
@@ -34,14 +33,6 @@ deploy:
   script:
     - rsync -e 'ssh -p 4242' -atv --delete --progress ./dist  ubuntu@hidden:/home/ubuntu/tmp/2023blobing
     - ssh -p 4242 ubuntu@hidden bash /home/ubuntu/2023blobing/runfronted.sh
-
-upload to cdn:
-  stage: upload to cdn
-  image:
-    name: rclone/rclone
-    entrypoint: ["/bin/sh", "-c"]
-  script:
-    - rclone -P --config ./rclone/rclone.conf sync ./dist/ sendss3:blobing-1309039959
 
 
 flushcache:

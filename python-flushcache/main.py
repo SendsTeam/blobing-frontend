@@ -25,7 +25,7 @@ def main():
         # 实例化一个请求对象,每个接口都会对应一个request对象
         req = models.PurgePathCacheRequest()
         params = {
-            "Paths": [ "http://cdn.sends.cc/" ],
+            "Paths": [ "http://blobing.sends.cc/" ],
             "FlushType": "flush"
         }
         req.from_json_string(json.dumps(params))
