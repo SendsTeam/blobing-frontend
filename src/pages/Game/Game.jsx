@@ -237,7 +237,7 @@ export default {
         worker: true,
         callback: this.phyCallback,
         scene: this.three.scene,
-        path: 'https://cdn.sends.cc/blobing/phy/'
+        path: 'phy/'
       })
     },
     phyCallback() {

@@ -27765,7 +27765,7 @@ const Pool = {
 	//extraTexture: [],
 	dracoLoader: null,
 	dracoLoaderType: 'js',
-	dracoPath: 'https://cdn.sends.cc/blobing/phy/libs/draco/',
+	dracoPath: './phy/libs/draco/',
 
 	maxAnisotropy: 1,
 
