@@ -647,7 +647,7 @@ export default {
         <Notify
           ref="ws"
           // v-show={this.game.status === this.game.STATUS.FREE}
-          className="top-0"
+          className="top-0 pointer-events-none"
           loadFinish={this.game.loadFinish}
         ></Notify>
         <Count ref="count" className="left-5 top-6"></Count>
