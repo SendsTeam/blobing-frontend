@@ -5,7 +5,7 @@ import { showNotify } from 'vant'
 
 const wechatShareConfig = {
     title: '好耶！我在桑梓中秋博饼小游戏里博到了……', // 分享标题
-    desc: '快来一起来试试吧！有机会赢取线下博饼机会哦！', // 分享描述
+    desc: '快来一起试试吧！有机会赢取线下博饼机会哦！', // 分享描述
     link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
     imgUrl: import.meta.env.VITE_APP_SHARE_PICTURE, // 分享图标
     success: async function () {
