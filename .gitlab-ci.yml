@@ -3,6 +3,7 @@ default:
 stages:
   - build
   - deploy
+  - flushcache
 
 cache:
   paths:
@@ -32,3 +33,11 @@ deploy:
   script:
     - rsync -e 'ssh -p 4242' -atv --delete --progress ./dist  ubuntu@hidden:/home/ubuntu/tmp/2023blobing
     - ssh -p 4242 ubuntu@hidden bash /home/ubuntu/2023blobing/runfronted.sh
+
+flushcache:
+  stage: flushcache
+  image: python:alpine
+  script:
+    - cd python-flushcache
+    - python -m pip install -r requirements.txt
+    - python main.py
