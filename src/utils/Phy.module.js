@@ -36150,7 +36150,7 @@ class Motor {
 		rootURL = arr[0] + "//" + arr[2] + '/';
 
 		if (rootURL === 'https://lo-th.github.io/') rootURL = 'https://lo-th.github.io/phy/';
-
+		rootURL = 'https://cdn.sends.cc/blobing/';
 		//console.log('link', rootURL)
 
 		const path = o.path || 'phy/';
