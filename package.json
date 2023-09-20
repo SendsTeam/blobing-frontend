@@ -20,6 +20,7 @@
     "weixin-js-sdk": "^1.6.0"
   },
   "devDependencies": {
+    "rollup-plugin-javascript-obfuscator": "^1.0.4",
     "@vitejs/plugin-vue-jsx": "^3.0.2",
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.28",
