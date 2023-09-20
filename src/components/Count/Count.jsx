@@ -85,7 +85,7 @@ export default {
       <div>
         <div className={'absolute text-xl ' + this.className}>
           <button onClick={this.clickHandle}>
-            <img className="inline-block" src="/icon/dice.svg" alt="dice" />
+            <img className="inline-block" src="https://cdn.sends.cc/blobing/icon/dice.svg" alt="dice" />
           </button>
           <Transition name={this.transitionName}>
             <div className=" relative inline-block h-[18px]" key={this.count}>
