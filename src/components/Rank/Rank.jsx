@@ -106,7 +106,7 @@ export default {
             <div>
               <div className="rank-title w-full text-center mt-24 md:mt-28 text-6xl md:text-7xl mb-4">
                 <button className="rank-arrow-left" onClick={this.leftClick}>
-                  <img src="https://cdn.sends.cc/blobing/icon/arrow-left-b.svg" alt="arrow-left" />
+                  <img src="/icon/arrow-left-b.svg" alt="arrow-left" />
                 </button>
                 <Transition name="rankOp">
                   <div className="inline-block mx-4" key={this.rankIndex}>
@@ -115,7 +115,7 @@ export default {
                   </div>
                 </Transition>
                 <button className="rank-arrow-right" onClick={this.rightClick}>
-                  <img src="https://cdn.sends.cc/blobing/icon/arrow-right-b.svg" alt="arrow-right" />
+                  <img src="/icon/arrow-right-b.svg" alt="arrow-right" />
                 </button>
               </div>
               <div className="rank-item-container w-full absolute top-44 md:top-52 max-w-md bottom-24 px-8">

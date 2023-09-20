@@ -134,22 +134,19 @@ export default {
       //sound
       let listener = new THREE.AudioListener()
       this.three.camera.add(listener)
-      new THREE.AudioLoader().load(
-        'https://cdn.sends.cc/blobing/sounds/collision.mp3',
-        (buffer) => {
-          for (let i = 0; i < this.dice.num; i++) {
-            this.dice.collisionSound.sound.push(new THREE.Audio(listener))
-            this.dice.collisionSound.soundTime.push(new Date().getTime())
-            this.dice.collisionSound.sound[i].setBuffer(buffer)
-            this.dice.collisionSound.sound[i].setLoop(false)
-            this.dice.collisionSound.sound[i].setVolume(1)
-          }
+      new THREE.AudioLoader().load('sounds/collision.mp3', (buffer) => {
+        for (let i = 0; i < this.dice.num; i++) {
+          this.dice.collisionSound.sound.push(new THREE.Audio(listener))
+          this.dice.collisionSound.soundTime.push(new Date().getTime())
+          this.dice.collisionSound.sound[i].setBuffer(buffer)
+          this.dice.collisionSound.sound[i].setLoop(false)
+          this.dice.collisionSound.sound[i].setVolume(1)
         }
-      )
+      })
 
       let bgmListener = new THREE.AudioListener()
       this.three.camera.add(bgmListener)
-      new THREE.AudioLoader().load('https://cdn.sends.cc/blobing/sounds/bgm.mp3', (buffer) => {
+      new THREE.AudioLoader().load('sounds/bgm.mp3', (buffer) => {
         this.bgm.sound = new THREE.Audio(bgmListener)
         this.bgm.sound.setBuffer(buffer)
         this.bgm.sound.setLoop(true)
@@ -159,7 +156,7 @@ export default {
 
       let touchListener = new THREE.AudioListener()
       this.three.camera.add(touchListener)
-      new THREE.AudioLoader().load('https://cdn.sends.cc/blobing/sounds/touch.wav', (buffer) => {
+      new THREE.AudioLoader().load('sounds/touch.wav', (buffer) => {
         this.touchSound = new THREE.Audio(touchListener)
         this.touchSound.setBuffer(buffer)
         this.touchSound.setVolume(0.2)
@@ -167,7 +164,7 @@ export default {
 
       let popListener = new THREE.AudioListener()
       this.three.camera.add(popListener)
-      new THREE.AudioLoader().load('https://cdn.sends.cc/blobing/sounds/pop.mp3', (buffer) => {
+      new THREE.AudioLoader().load('sounds/pop.mp3', (buffer) => {
         this.resultSound = new THREE.Audio(popListener)
         this.resultSound.setBuffer(buffer)
         this.resultSound.setVolume(1)
@@ -197,16 +194,13 @@ export default {
 
       // background
       this.$refs.loadingInstance.setMsg('1/2 :加载背景ing...')
-      new RGBELoader().load(
-        'https://cdn.sends.cc/blobing/textures/kloppenheim_02_puresky_1k.hdr',
-        (texture) => {
-          texture.mapping = THREE.EquirectangularReflectionMapping
-          this.three.scene.background = texture
-          // this.three.scene.backgroundBlurriness = 0.2
-          this.three.scene.environment = texture
-          this.render3D()
-        }
-      )
+      new RGBELoader().load('/textures/kloppenheim_02_puresky_1k.hdr', (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping
+        this.three.scene.background = texture
+        // this.three.scene.backgroundBlurriness = 0.2
+        this.three.scene.environment = texture
+        this.render3D()
+      })
 
       // handle window resize
       window.addEventListener('resize', this.onWindowResize)
@@ -243,11 +237,7 @@ export default {
     phyCallback() {
       this.setGravity(100)
       this.$refs.loadingInstance.setMsg('2/2 :加载模型ing...')
-      phy.load(
-        ['Bowl/bowl.glb', 'Dice/dice.glb'],
-        this.modelLoadedCallback,
-        'https://cdn.sends.cc/blobing/models/'
-      )
+      phy.load(['Bowl/bowl.glb', 'Dice/dice.glb'], this.modelLoadedCallback, 'models/')
     },
     modelLoadedCallback() {
       //bowl
@@ -268,8 +258,8 @@ export default {
         name: 'dice',
         roughness: 0.0,
         metalness: 0.0,
-        map: phy.texture({ url: 'https://cdn.sends.cc/blobing/textures/dices_c.png' }),
-        normalMap: phy.texture({ url: 'https://cdn.sends.cc/blobing/textures/dices_n.png' }),
+        map: phy.texture({ url: 'textures/dices_c.png' }),
+        normalMap: phy.texture({ url: 'textures/dices_n.png' }),
         normalScale: [5, -5]
       })
 

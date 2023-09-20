@@ -15,7 +15,7 @@ export default {
       <div>
         <div className={'absolute ' + this.className}>
           <button onClick={this.clickEmit}>
-            <img src="https://cdn.sends.cc/blobing/icon/return.svg" alt="return" />
+            <img src="/icon/return.svg" alt="return" />
           </button>
         </div>
       </div>

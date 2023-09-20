@@ -25,7 +25,7 @@ export default {
     return (
       <div className={'absolute text-xl ' + this.className}>
         <button onClick={this.clickHandle}>
-          <img className="inline-block" src="https://cdn.sends.cc/blobing/icon/relay.svg" alt="relay" />
+          <img className="inline-block" src="/icon/relay.svg" alt="relay" />
         </button>
       </div>
     )
