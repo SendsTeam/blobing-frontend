@@ -15,7 +15,7 @@ export default {
     clickHandle() {
       showDialog({
         title: '快喊上小伙伴一起玩耍吧~',
-        message: '点击右上角分享到朋友圈, 投掷次数将 +1 (每日限3次)',
+        message: '点击右上角分享到朋友圈、QQ空间或分享给微信、QQ好友, 投掷次数将 +1 (每日限3次)',
         theme: 'round-button'
       })
     }

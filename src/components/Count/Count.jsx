@@ -36,6 +36,22 @@ export default {
         }
       }
     },
+    async justUpdateCount() {
+      const result = await request.getCount()
+      if (result === 0) {
+        this.transitionName = 'slide-down'
+        this.count = result
+        // showNotify({ type: 'warning', message: '今日次数已用完，投掷将不再记录' })
+      } else if (result !== null) {
+        if (result > this.count) {
+          this.transitionName = 'slide-up'
+          this.count = result
+        } else if (result < this.count) {
+          this.transitionName = 'slide-down'
+          this.count = result
+        }
+      }
+    },
     clickHandle() {
       this.showLog = true
       this.updateRecord()
@@ -46,7 +62,11 @@ export default {
     async updateRecord() {
       const result = await request.record()
       if (result.maps) {
-        this.log = result.maps
+        // 将对象转换为数组，并按值进行降序排序
+        const sortedArray = Object.entries(result.maps).sort((a, b) => b[1] - a[1])
+        // 将排序后的数组转换回对象
+        const sortedObject = Object.fromEntries(sortedArray)
+        this.log = sortedObject
       }
       console.log(this.log)
     }
@@ -54,9 +74,9 @@ export default {
   async mounted() {
     await request.init()
     this.updateCount()
-    // setInterval(() => {
-    //   this.updateCount()
-    // }, 500)
+    setInterval(() => {
+      this.justUpdateCount()
+    }, 500)
     // console.log(await request.record())
     this.updateCount()
   },

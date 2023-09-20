@@ -1,5 +1,6 @@
 import './Loading.css'
 import { Transition, TransitionGroup } from 'vue'
+import { showNotify } from 'vant'
 
 export default {
   data() {
@@ -20,6 +21,9 @@ export default {
       this.setMsg('加载中......')
       this.isLoading = true
     }
+  },
+  mounted() {
+    showNotify({ type: 'success', message: '首次加载较久，请耐心等待！' })
   },
   render() {
     return (

@@ -1,6 +1,5 @@
 import './Notify.css'
 import { Barrage } from 'vant'
-import 'vant/es/barrage/style'
 import request from '../../utils/request.js'
 import { getToken } from '../../utils/tokenAndWxlogin.js'
 
@@ -84,10 +83,8 @@ export default {
           this.className
         }
       >
-        <Barrage className="notify-text" v-model={this.messageQueue} rows={20} duration={8000}>
-          <div className=" w-screen h-screen">
-            
-          </div>
+        <Barrage className="notify-text" v-model={this.messageQueue} rows={25} duration={8000}>
+          <div className=" w-screen h-screen"></div>
         </Barrage>
       </div>
     )

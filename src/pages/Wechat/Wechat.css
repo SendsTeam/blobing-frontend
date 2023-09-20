@@ -2,3 +2,10 @@
   -webkit-text-stroke: 1px #fffcb9;
   color: #f24a4a;
 }
+
+.notify-text span {
+  font-size: 20px !important;
+  color: #f24a4a !important;
+  font-weight: 500 !important;
+  -webkit-text-stroke: 0.5px #6d352e !important;
+}

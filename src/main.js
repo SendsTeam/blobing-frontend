@@ -5,6 +5,7 @@ import { initSdk } from './utils/wxSdk.js'
 
 
 import 'vant/es/notify/style'
+import 'vant/es/barrage/style'
 
 const app = createApp(App)
 

@@ -5,15 +5,18 @@ import { showNotify } from 'vant'
 
 const wechatShareConfig = {
     title: '好耶！我在桑梓中秋博饼小游戏里博到了……', // 分享标题
-    desc: '快来一起来试试吧！', // 分享描述
+    desc: '快来一起来试试吧！有机会赢取线下博饼机会哦！', // 分享描述
     link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-    imgUrl: "http://songs.sends.cc/img/blobing.png", // 分享图标
+    imgUrl: import.meta.env.VITE_APP_SHARE_PICTURE, // 分享图标
     success: async function () {
         const result = await request.addCount()
-        console.log(result)
+        showNotify({ type: 'warning', message: result })
     },
     cancel: function () {
         showNotify({ type: 'warning', message: '分享失败！' })
+    },
+    complete: function () {
+        console.log('share complete')
     }
 }
 
@@ -37,13 +40,13 @@ export function initSdk() {
         })
 
         wx.ready(function () {
-            wx.updateAppMessageShareData(wechatShareConfig)
-            wx.updateTimelineShareData(wechatShareConfig)
-            // wx.onMenuShareTimeline(wechatShareConfig)
-            // wx.onMenuShareAppMessage(wechatShareConfig)
-            // wx.onMenuShareQQ(wechatShareConfig)
-            // wx.onMenuShareWeibo(wechatShareConfig)
-            // wx.onMenuShareQZone(wechatShareConfig)
+            // wx.updateAppMessageShareData(wechatShareConfig)
+            // wx.updateTimelineShareData(wechatShareConfig)
+            wx.onMenuShareTimeline(wechatShareConfig)
+            wx.onMenuShareAppMessage(wechatShareConfig)
+            wx.onMenuShareQQ(wechatShareConfig)
+            wx.onMenuShareWeibo(wechatShareConfig)
+            wx.onMenuShareQZone(wechatShareConfig)
         })
     })
 }
