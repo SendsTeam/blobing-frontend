@@ -41,7 +41,7 @@ upload to cdn:
     name: rclone/rclone
     entrypoint: ["/bin/sh", "-c"]
   script:
-    - rclone -P --config ./rclone/rclone.conf sync ./dist/ sendss3:public-cdn-1309039959/blobing
+    - rclone -P --config ./rclone/rclone.conf sync ./dist/ sendss3:blobing-1309039959
 
 
 flushcache:
