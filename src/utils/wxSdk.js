@@ -10,7 +10,7 @@ const wechatShareConfig = {
     imgUrl: import.meta.env.VITE_APP_SHARE_PICTURE, // 分享图标
     complete: async function () {
         const result = await request.addCount()
-        showNotify({ type: 'warning', message: result, duration: 5000 })
+        showNotify({ type: 'warning', message: result, duration: 15000 })
         console.log('share complete')
     }
 }
