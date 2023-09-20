@@ -588,6 +588,11 @@ export default {
     play() {
       this.game.playBtnAble = false
       this.game.status = this.game.STATUS.READY
+      showNotify({
+        type: 'warning',
+        message: '请按住屏幕并移动骰子，将骰子掷入碗内!',
+        duration: 5000
+      })
     },
     getDetail() {
       let detail = []
