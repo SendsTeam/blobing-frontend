@@ -248,7 +248,7 @@ export default {
         shape: bowlModel,
         mesh: bowlModel,
         pos: [0, -4, 0],
-        restitution: 0.6,
+        restitution: 0.5,
         friction: 0.2
       })
       bowl.castShadow = false
@@ -270,7 +270,7 @@ export default {
       this.game.playBtnAble = true
 
       let i = this.dice.num
-      const radius = 2
+      const radius = 1.3
       while (i--) {
         let index = this.dice.num - 1 - i
         const angle = (Math.PI * 2 * i) / this.dice.num // 计算每个骰子的角度
@@ -434,7 +434,7 @@ export default {
     movePos(e) {
       let offset = this.convertMousePositionToCoordinates(e)
       let i = this.dice.num
-      const radius = 2
+      const radius = 1.3
       while (i--) {
         const angle = (Math.PI * 2 * i) / this.dice.num // 计算每个骰子的角度
         const x = Math.cos(angle) * radius // 计算 x 坐标
