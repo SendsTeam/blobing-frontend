@@ -417,6 +417,7 @@ export default {
         this.game.status = this.game.STATUS.ING
         if (this.game.judgeTimer) {
           clearTimeout(this.game.judgeTimer)
+          this.game.judgeTimer = null
         }
         this.game.judgeFlag = false
         this.game.judgeTimer = setTimeout(() => {
@@ -475,11 +476,21 @@ export default {
           this.judgeResult(true)
           this.postData()
           this.game.status = this.game.STATUS.FREE
+          if (this.game.judgeTimer) {
+            clearTimeout(this.game.judgeTimer)
+            this.game.judgeTimer = null
+            this.game.judgeFlag = false
+          }
         } else if (sleep || this.game.judgeFlag) {
           this.resultSound.play()
           this.judgeResult(false)
           this.postData()
           this.game.status = this.game.STATUS.FREE
+          if (this.game.judgeTimer) {
+            clearTimeout(this.game.judgeTimer)
+            this.game.judgeTimer = null
+            this.game.judgeFlag = false
+          }
         }
       }
     },
