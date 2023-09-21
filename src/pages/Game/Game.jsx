@@ -71,7 +71,7 @@ export default {
           ]
         },
         playBtnAble: false,
-        desktopMode: false
+        desktopMode: false,
       },
       dice: {
         num: 6,
@@ -193,7 +193,7 @@ export default {
       this.three.scene.add(directionalLight)
 
       // background
-      this.$refs.loadingInstance.setMsg('1/3 :加载背景ing...')
+      this.$refs.loadingInstance.setMsg('1/2 :加载背景ing...')
       new RGBELoader().load('/textures/kloppenheim_02_puresky_1k.hdr', (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping
         this.three.scene.background = texture
@@ -236,7 +236,7 @@ export default {
     },
     phyCallback() {
       this.setGravity(100)
-      this.$refs.loadingInstance.setMsg('2/3 :加载模型ing...')
+      this.$refs.loadingInstance.setMsg('2/2 :加载模型ing...')
       phy.load(['Bowl/bowl.glb', 'Dice/dice.glb'], this.modelLoadedCallback, 'models/')
     },
     modelLoadedCallback() {
@@ -263,9 +263,9 @@ export default {
         normalScale: [5, -5]
       })
 
-      this.$refs.loadingInstance.setMsg('3/3 :加载物理引擎ing...')
-      // this.$refs.loadingInstance.finish()
-      // this.game.loadFinish = true
+      this.$refs.loadingInstance.setMsg('加载完毕')
+      this.$refs.loadingInstance.finish()
+      this.game.loadFinish = true
       this.freeAngle()
       this.game.playBtnAble = true
 
@@ -299,11 +299,6 @@ export default {
           b1: 'diceInstance' + index,
           b2: 'bowlInstance',
           callback: (data) => {
-            if (!this.game.loadFinish) {
-              this.$refs.loadingInstance.setMsg('加载完毕')
-              this.$refs.loadingInstance.finish()
-              this.game.loadFinish = true
-            }
             this.dice.data[index].collision = data.hit
             this.collisionCallback(index, data)
           },
