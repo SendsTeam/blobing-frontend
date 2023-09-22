@@ -21,6 +21,8 @@ import { isDesktop } from '../../utils/device.js'
 import { showNotify } from 'vant'
 import request from '../../utils/request.js'
 import { encrypt } from '../../utils/crypto.js'
+import { showToast } from 'vant'
+import 'vant/es/toast/style'
 
 export default {
   setup() {
@@ -71,7 +73,7 @@ export default {
           ]
         },
         playBtnAble: false,
-        desktopMode: false,
+        desktopMode: false
       },
       dice: {
         num: 6,
@@ -599,9 +601,14 @@ export default {
     play() {
       this.game.playBtnAble = false
       this.game.status = this.game.STATUS.READY
-      showNotify({
-        type: 'warning',
+      // showNotify({
+      //   type: 'warning',
+      //   message: '请按住屏幕并移动骰子，将骰子掷入碗内!',
+      //   duration: 5000
+      // })
+      showToast({
         message: '请按住屏幕并移动骰子，将骰子掷入碗内!',
+        position: 'bottom',
         duration: 5000
       })
     },
