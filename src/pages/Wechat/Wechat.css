@@ -7,5 +7,5 @@
   font-size: 20px !important;
   color: #f24a4a !important;
   font-weight: 500 !important;
-  -webkit-text-stroke: 0.5px #6d352e !important;
+  text-shadow: 0 .5px 0 #6d352e, 0 -.5px 0 #6d352e, .5px 0 0 #6d352e, -.5px 0 0 #6d352e !important;
 }
