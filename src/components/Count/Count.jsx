@@ -25,7 +25,7 @@ export default {
       if (result === 0) {
         this.transitionName = 'slide-down'
         this.count = result
-        showNotify({ type: 'warning', message: '今日次数已用完，投掷将不再记录' })
+        showNotify({ type: 'warning', message: '今日次数已用完，投掷将不再记录，转发分享获得额外次数！' })
       } else if (result !== null) {
         if (result > this.count) {
           this.transitionName = 'slide-up'
