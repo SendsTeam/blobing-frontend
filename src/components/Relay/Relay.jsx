@@ -1,5 +1,4 @@
 import { Dialog } from 'vant'
-import 'vant/es/dialog/style'
 import './Relay.css'
 
 export default {

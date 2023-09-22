@@ -1,7 +1,7 @@
 import './Count.css'
 import { Transition } from 'vue'
 import request from '../../utils/request.js'
-import { showNotify } from 'vant'
+import { showDialog } from 'vant'
 import ReturnBtn from '../ReturnBtn/ReturnBtn.jsx'
 
 export default {
@@ -25,7 +25,10 @@ export default {
       if (result === 0) {
         this.transitionName = 'slide-down'
         this.count = result
-        showNotify({ type: 'warning', message: '今日次数已用完，投掷将不再记录，转发分享获得额外次数！' })
+        showDialog({
+          message: '今日次数已用完，投掷将不再记录，转发分享获得额外次数！',
+          theme: 'round-button'
+        })
       } else if (result !== null) {
         if (result > this.count) {
           this.transitionName = 'slide-up'
