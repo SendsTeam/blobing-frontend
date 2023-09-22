@@ -16,7 +16,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
 import Stats from 'stats.js'
 import { phy } from '../../utils/Phy.module.js'
-import { isDesktop } from '../../utils/device.js'
+import { isDesktop, isIOS } from '../../utils/device.js'
 
 import { showNotify } from 'vant'
 import request from '../../utils/request.js'
@@ -229,7 +229,7 @@ export default {
     //phy
     phyInit() {
       phy.init({
-        type: 'PHYSX',
+        type: isIOS() ? 'OIMO' : 'PHYSX',
         worker: true,
         callback: this.phyCallback,
         scene: this.three.scene,
@@ -292,7 +292,7 @@ export default {
             // density: 0.5,
             friction: 0.5,
             mass: 0.01,
-            restitution: 0.5
+            restitution: isIOS() ? 0.7 : 0.5
           })
         )
         this.dice.data[index].collision = false
