@@ -73,7 +73,8 @@ export default {
           ]
         },
         playBtnAble: false,
-        desktopMode: false
+        desktopMode: false,
+        iosMode: false
       },
       dice: {
         num: 6,
@@ -229,7 +230,7 @@ export default {
     //phy
     phyInit() {
       phy.init({
-        type: isIOS() ? 'OIMO' : 'PHYSX',
+        type: this.game.iosMode ? 'OIMO' : 'PHYSX',
         worker: true,
         callback: this.phyCallback,
         scene: this.three.scene,
@@ -292,7 +293,7 @@ export default {
             // density: 0.5,
             friction: 0.5,
             mass: 0.01,
-            restitution: isIOS() ? 0.7 : 0.5
+            restitution: this.game.iosMode ? 0.7 : 0.5
           })
         )
         this.dice.data[index].collision = false
@@ -422,10 +423,13 @@ export default {
           this.game.judgeTimer = null
         }
         this.game.judgeFlag = false
-        this.game.judgeTimer = setTimeout(() => {
-          this.game.judgeFlag = true
-          this.game.judgeTimer = null
-        }, 5000)
+        this.game.judgeTimer = setTimeout(
+          () => {
+            this.game.judgeFlag = true
+            this.game.judgeTimer = null
+          },
+          this.game.iosMode ? 3000 : 5000
+        )
       }
     },
     move(e) {
@@ -658,6 +662,7 @@ export default {
     }
   },
   mounted() {
+    this.game.iosMode = isIOS()
     this.threeInit()
     this.render3D()
     this.animate()
