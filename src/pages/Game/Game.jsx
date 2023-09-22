@@ -673,8 +673,15 @@ export default {
           className="top-0 pointer-events-none"
           loadFinish={this.game.loadFinish}
         ></Notify>
-        <Count ref="count" className="left-5 top-6"></Count>
-        <Relay className="right-5 top-6"></Relay>
+        <Count
+          v-show={this.game.status === this.game.STATUS.FREE}
+          ref="count"
+          className="left-5 top-6"
+        ></Count>
+        <Relay
+          v-show={this.game.status === this.game.STATUS.FREE}
+          className="right-5 top-6"
+        ></Relay>
         <Result
           v-show={this.game.status === this.game.STATUS.FREE}
           className="top-24"
