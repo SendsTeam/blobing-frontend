@@ -611,6 +611,23 @@ export default {
         position: 'bottom',
         duration: 5000
       })
+
+      // 9.22 点击按钮后骰子初始化
+      let i = this.dice.num
+      const radius = 1.3
+      while (i--) {
+        const angle = (Math.PI * 2 * i) / this.dice.num // 计算每个骰子的角度
+        const x = Math.cos(angle) * radius // 计算 x 坐标
+        const z = Math.sin(angle) * radius // 计算 z 坐标
+        const pos = [x, 6, z] // 设置骰子的位置
+        const rot = [Math.random() * 360, Math.random() * 360, Math.random() * 360]
+        phy.change({
+          name: 'diceInstance' + i,
+          pos,
+          rot,
+          reset: true
+        })
+      }
     },
     getDetail() {
       let detail = []
