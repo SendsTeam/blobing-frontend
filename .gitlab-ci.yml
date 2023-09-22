@@ -15,6 +15,7 @@ build:
     - npm i -g pnpm
     - pnpm install --no-frozen-lockfile
     - pnpm run build 
+    - sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
     - apt update && apt install zip
     - zip -r dist.zip ./dist/
   artifacts:
