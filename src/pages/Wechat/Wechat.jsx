@@ -45,9 +45,9 @@ export default {
           </Barrage>
         </div>
         <div className="fixed top-0 left-0 right-0 bottom-0 flex flex-col justify-center items-center z-[999]">
-          <div className="text-center max-w-md backdrop-blur-sm rounded-[36px] p-2 m-4 shadow-lg">
+          <div className="text-center max-w-md  rounded-[36px] overflow-hidden m-4 shadow-lg">
             <img src="/img/qrcode.png" alt="qrcode" />
-            <div className="wechat-tips text-3xl">~微信扫码，快来玩耍～</div>
+            {/* <div className="wechat-tips text-3xl">~微信扫码，快来玩耍～</div> */}
           </div>
         </div>
       </div>
