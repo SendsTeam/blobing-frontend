@@ -26,7 +26,7 @@ export default {
         this.transitionName = 'slide-down'
         this.count = result
         showDialog({
-          message: '今日次数已用完，投掷将不再记录，转发分享获得额外次数！',
+          message: '今日次数已用完，投掷将不再记录。点击左上角骰子图标查看 [ 我的战绩 ], 点击右上角 [ 转发分享 ]获得额外投掷次数！',
           theme: 'round-button'
         })
       } else if (result !== null) {
