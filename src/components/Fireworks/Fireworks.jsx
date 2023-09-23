@@ -6,6 +6,15 @@ export default {
       lottieInstance: null
     }
   },
+  methods: {
+    play() {
+      this.lottieInstance.play()
+    },
+    reset() {
+      this.lottieInstance.stop()
+      this.lottieInstance.goToAndStop(0)
+    }
+  },
   mounted() {
     this.lottieInstance = lottie.loadAnimation({
       container: this.$refs.lottieRef,
@@ -22,7 +31,7 @@ export default {
   },
   render() {
     return (
-      <div className="fireworks fixed bottom-0 top-0 left-0 right-0 flex z-50 justify-center items-center">
+      <div className="fireworks fixed bottom-0 top-0 left-0 right-0 flex z-50 justify-center items-center pointer-events-none">
         <div ref="lottieRef"></div>
       </div>
     )

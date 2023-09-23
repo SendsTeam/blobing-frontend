@@ -9,6 +9,7 @@ import Copyright from '../../components/Copyright/Copyright.jsx'
 import Notify from '../../components/Notify/Notify.jsx'
 import Count from '../../components/Count/Count.jsx'
 import Relay from '../../components/Relay/Relay.jsx'
+import Fireworks from '../../components/Fireworks/Fireworks.jsx'
 
 import * as THREE from 'three'
 import * as TWEEN from '@tweenjs/tween.js'
@@ -553,6 +554,10 @@ export default {
         }
       }
       this.game.result.index = result
+      if (result >= 10) {
+        this.$refs.fireworks.reset()
+        this.$refs.fireworks.play()
+      }
     },
     countPoints() {
       const points = {
@@ -733,6 +738,7 @@ export default {
           className="bottom-16"
           loadFinish={this.game.loadFinish}
         ></Rule>
+        <Fireworks ref="fireworks"></Fireworks>
       </div>
     )
   }
