@@ -30,7 +30,7 @@ export default {
             快喊上小伙伴一起玩耍吧~
           </div>
           <div className="w-full text-center p-2">
-            点击右上角或长按图片分享到朋友圈、QQ空间或分享给微信、QQ好友, 投掷次数+1 <br />
+            点击右上角分享到朋友圈、QQ空间或分享给微信、QQ好友, 投掷次数+1 <br />
             (每日限3次)
           </div>
           <div className=" aspect-square w-full p-2">
