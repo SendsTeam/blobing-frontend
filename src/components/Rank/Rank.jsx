@@ -3,6 +3,7 @@ import ReturnBtn from '../ReturnBtn/ReturnBtn.jsx'
 import RankItem from '../RankItem/RankItem.jsx'
 import { Transition, TransitionGroup } from 'vue'
 import request from '../../utils/request.js'
+import { showToast } from 'vant'
 
 export default {
   props: {
@@ -32,6 +33,11 @@ export default {
       this.showRank = true
       this.rankIndex = 0
       this.updateAll()
+      showToast({
+        message: '注意：日榜以及骰子次数将在每日早晨8点刷新!',
+        // position: 'bottom',
+        duration: 5000
+      })
     },
     closeRank() {
       this.showRank = false
