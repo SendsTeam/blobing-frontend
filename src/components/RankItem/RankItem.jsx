@@ -15,6 +15,11 @@ export default {
       default: null
     }
   },
+  data() {
+    return {
+      date: null
+    }
+  },
   methods: {
     formatTimestamp(stamp) {
       const date = new Date(stamp * 1000) // 将时间戳转换为毫秒
@@ -29,14 +34,15 @@ export default {
       return formatted
     }
   },
+  mounted() {
+    if (this.txb) this.date = this.formatTimestamp(this.item.time.seconds)
+  },
   render() {
     return (
       <div>
         {this.txb ? (
           <div className="rank-item w-full mb-2 h-[104px] rounded-[18px] px-4">
-            <div className="rank-points w-full h-1/2 text-center">
-              {this.formatTimestamp(this.item.time.seconds)}
-            </div>
+            <div className="rank-points w-full h-1/2 text-center">{this.date}</div>
             <div className="w-full h-1/2 flex justify-around items-center">
               <span className="rank-name max-w-[50%] overflow-hidden rounded-3xl w-1/2 h-full text-center">
                 <div className="w-full whitespace-nowrap text-ellipsis overflow-hidden">

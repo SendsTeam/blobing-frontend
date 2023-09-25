@@ -4,6 +4,8 @@ import RankItem from '../RankItem/RankItem.jsx'
 import { Transition, TransitionGroup } from 'vue'
 import request from '../../utils/request.js'
 import { showToast } from 'vant'
+import { RecycleScroller } from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default {
   props: {
@@ -61,6 +63,10 @@ export default {
       if (result && result.boBingRank && result.BingMyRank) {
         this.rankData[0].all = result.boBingRank
         this.rankData[0].me = result.BingMyRank
+        this.rankData[0].all.forEach((element, index) => {
+          element.id = 'day' + index
+          element.index = index
+        })
       }
     },
     async updateTop() {
@@ -68,12 +74,20 @@ export default {
       if (result && result.boBingRank && result.BingMyRank) {
         this.rankData[1].all = result.boBingRank
         this.rankData[1].me = result.BingMyRank
+        this.rankData[1].all.forEach((element, index) => {
+          element.id = 'all' + index
+          element.index = index
+        })
       }
     },
     async updateTianXuan() {
       const result = await request.tianXuan()
       if (result && result.boBingTianXuan) {
         this.rankData[2].all = result.boBingTianXuan
+        this.rankData[2].all.forEach((element, index) => {
+          element.id = 'tx' + index
+          element.index = index
+        })
       }
     },
     async updateAll() {
@@ -125,7 +139,7 @@ export default {
                 </button>
               </div>
               <div className="rank-item-container w-full absolute top-44 md:top-52 max-w-md bottom-24 px-8">
-                <TransitionGroup name="fadeList">
+                {/* <TransitionGroup name="fadeList">
                   {this.rankData[this.rankIndex].all.map((item, index) => {
                     return (
                       <RankItem
@@ -136,7 +150,27 @@ export default {
                       />
                     )
                   })}
-                </TransitionGroup>
+                </TransitionGroup> */}
+                <RecycleScroller
+                  className="h-full"
+                  items={this.rankData[this.rankIndex].all}
+                  item-size={this.rankIndex === 2 ? 118 : 60}
+                  key-field="id"
+                  page-mode
+                >
+                  {({ item }) => {
+                    return (
+                      <Transition name="fadeList">
+                        <RankItem
+                          item={item}
+                          index={item.index}
+                          key={item.id}
+                          txb={this.rankIndex === 2 ? true : false}
+                        />
+                      </Transition>
+                    )
+                  }}
+                </RecycleScroller>
               </div>
               <div className="rank-about-me w-full absolute h-20 bottom-0 max-w-md px-2">
                 <Transition name="fade" mode="out-in">
