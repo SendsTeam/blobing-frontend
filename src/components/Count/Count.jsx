@@ -1,7 +1,7 @@
 import './Count.css'
 import { Transition } from 'vue'
 import request from '../../utils/request.js'
-import { showDialog } from 'vant'
+import { showDialog, showNotify } from 'vant'
 import ReturnBtn from '../ReturnBtn/ReturnBtn.jsx'
 
 export default {
@@ -16,7 +16,8 @@ export default {
       count: 0,
       transitionName: 'slide-up',
       showLog: false,
-      log: {}
+      log: {},
+      net: true
     }
   },
   methods: {
@@ -26,7 +27,8 @@ export default {
         this.transitionName = 'slide-down'
         this.count = result
         showDialog({
-          message: '今日次数已用完，投掷将不再记录。点击左上角骰子图标查看 [ 我的战绩 ], 点击右上角 [ 转发分享 ]获得额外投掷次数！',
+          message:
+            '今日次数已用完，投掷将不再记录。点击左上角骰子图标查看 [ 我的战绩 ], 点击右上角 [ 转发分享 ]获得额外投掷次数！',
           theme: 'round-button'
         })
       } else if (result !== null) {
@@ -52,6 +54,16 @@ export default {
         } else if (result < this.count) {
           this.transitionName = 'slide-down'
           this.count = result
+        }
+      }
+      if (result === null) {
+        this.net = false
+        this.$parent.game.playBtnAble = false
+        showNotify({ type: 'danger', message: '请检查网络连接！' })
+      } else {
+        if (this.net == false) {
+          this.net = true
+          this.$parent.game.playBtnAble = true
         }
       }
     },

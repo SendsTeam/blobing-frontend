@@ -100,7 +100,9 @@ export default {
         this.three.controls.enabled = false
         this.readyAngle()
       } else if (value === this.game.STATUS.FREE) {
-        this.game.playBtnAble = true
+        setTimeout(() => {
+          this.game.playBtnAble = true
+        }, 1000)
         this.three.controls.enabled = true
         this.setGravity(100)
         this.freeAngle()
@@ -727,7 +729,7 @@ export default {
           loadFinish={this.game.loadFinish}
         ></Rank>
         <PlayBtn
-          v-show={this.game.status === this.game.STATUS.FREE}
+          v-show={this.game.status === this.game.STATUS.FREE && this.game.playBtnAble}
           onBtnClick={this.play}
           className="bottom-28"
           loadFinish={this.game.loadFinish}
