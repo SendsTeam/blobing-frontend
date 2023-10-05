@@ -10,6 +10,7 @@ import Notify from '../../components/Notify/Notify.jsx'
 import Count from '../../components/Count/Count.jsx'
 import Relay from '../../components/Relay/Relay.jsx'
 import Fireworks from '../../components/Fireworks/Fireworks.jsx'
+import Notice from '../../components/Notice/Notice.jsx'
 
 import * as THREE from 'three'
 import * as TWEEN from '@tweenjs/tween.js'
@@ -741,6 +742,7 @@ export default {
           loadFinish={this.game.loadFinish}
         ></Rule>
         <Fireworks ref="fireworks"></Fireworks>
+        <Notice loadFinish={this.game.loadFinish}></Notice>
       </div>
     )
   }
