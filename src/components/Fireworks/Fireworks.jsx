@@ -31,7 +31,7 @@ export default {
   },
   render() {
     return (
-      <div className="fireworks fixed bottom-0 top-0 left-0 right-0 flex z-50 justify-center items-center pointer-events-none">
+      <div className="fireworks fixed bottom-0 top-0 left-0 right-0 flex z-[9999] justify-center items-center pointer-events-none">
         <div ref="lottieRef"></div>
       </div>
     )
