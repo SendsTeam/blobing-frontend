@@ -33,10 +33,10 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" | ssh-add -
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - ssh-keyscan -p 4242 hidden >> ~/.ssh/known_hosts
+    - ssh-keyscan -p 4242 ${SENDS_SERVER} >> ~/.ssh/known_hosts
   script:
-    - rsync -e 'ssh -p 4242' -atv --delete --progress ./dist  ubuntu@hidden:/home/ubuntu/tmp/2023blobing
-    - ssh -p 4242 ubuntu@hidden bash /home/ubuntu/2023blobing/runfronted.sh
+    - rsync -e 'ssh -p 4242' -atv --delete --progress ./dist  ubuntu@${SENDS_SERVER}:/home/ubuntu/tmp/2023blobing
+    - ssh -p 4242 ubuntu@${SENDS_SERVER} bash /home/ubuntu/2023blobing/runfronted.sh
 
 
 flushcache:
